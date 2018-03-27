@@ -13,19 +13,11 @@
             android:id="@+id/tv_life"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingLeft="10dp"
-            android:textColor="@color/black"
+            android:padding="10dp"
+            android:textColor="@color/selector_life_text"
+            android:background="@drawable/life_text_selector"
             android:textSize="18sp"
             android:text="当前人生阶段 : " />
-        <TextView
-            android:id="@+id/tv_life_select"
-            android:clickable="true"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:textSize="18sp"
-            android:layout_toEndOf="@id/tv_life"
-            />
 
     </RelativeLayout>
 

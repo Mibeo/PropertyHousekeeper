@@ -1,12 +1,16 @@
 package com.example.bingjiazheng.propertyhousekeeper.Activity;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
@@ -16,8 +20,11 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
+import com.example.bingjiazheng.propertyhousekeeper.Entity.MySQLiteHelper;
 import com.example.bingjiazheng.propertyhousekeeper.R;
 import com.example.bingjiazheng.propertyhousekeeper.Ui.ImageViewPlus;
+import com.example.bingjiazheng.propertyhousekeeper.Utils.SpendManger;
 import com.example.bingjiazheng.propertyhousekeeper.Utils.utils;
 
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.ToastUtil.showText;
@@ -37,6 +44,10 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     private RelativeLayout rl;
     private TextView tv_pass;
     private Context context;
+    private MySQLiteHelper helper;
+    private SQLiteDatabase sqLiteDatabase;
+    private String sql = "create table if not exists password_db(user varchar(20),password varchar(20))";
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +59,10 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initView() {
+        helper = SpendManger.getIntance(this);
+        sqLiteDatabase = helper.getWritableDatabase();
+        sqLiteDatabase.execSQL(sql);
+        sqLiteDatabase.close();
         bt_login = (Button) findViewById(R.id.bt_login);
         bt_login.setOnClickListener(this);
         bt_register = (Button) findViewById(R.id.bt_register);
@@ -62,7 +77,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         editor = mSettings.edit();
         et_user = (EditText) findViewById(R.id.et_user);
         et_password = (EditText) findViewById(R.id.et_password);
-
         checkBox = (CheckBox) findViewById(R.id.checkbox);
         checkBox.setChecked(mSettings.getBoolean("RememberPassword", false));
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -73,15 +87,52 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                 } else {
                     editor.putBoolean("RememberPassword", false);
                 }
-                editor.commit();
+                editor.apply();
             }
         });
         if (!"".equals(mSettings.getString("TheLastUser", ""))) {
             et_user.setText(mSettings.getString("TheLastUser", ""));
             if (checkBox.isChecked()) {
-                et_password.setText(mSettings.getString("" + et_user.getText(), ""));
+                et_password.setText(getuserPassword(et_user.getText().toString()));
             }
         }
+
+    }
+
+    private boolean userIsexists(String s) {
+        sqLiteDatabase = helper.getWritableDatabase();
+        Cursor cursor = sqLiteDatabase.query("password_db", new String[]{"user,password"}, "user like ?", new String[]{"" + s}, null, null, null);
+        if (!cursor.moveToNext()) {
+            cursor.close();
+            sqLiteDatabase.close();
+            return false;
+        } else {
+            cursor.close();
+            sqLiteDatabase.close();
+            return true;
+        }
+    }
+
+    private String getuserPassword(String s) {
+        sqLiteDatabase = helper.getWritableDatabase();
+        Cursor cursor = sqLiteDatabase.query("password_db", new String[]{"user,password"}, "user like ?", new String[]{"" + s}, null, null, null);
+        String string = null;
+        while (cursor.moveToNext()) {
+            string = cursor.getString(1);
+        }
+        cursor.close();
+        sqLiteDatabase.close();
+        return string;
+    }
+
+    private void setUserPassword(String s1, String s2) {
+        sqLiteDatabase = helper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("user", "" + s1);
+        contentValues.put("password", "" + s2);
+        sqLiteDatabase.insert("password_db", null, contentValues);
+        sqLiteDatabase.close();
+        showText(this,"注册成功");
     }
 
     @Override
@@ -103,31 +154,37 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void login() {
-        if (!"".equals(et_user.getText().toString()) && !"".equals(et_password.getText().toString())) {
-            if (et_password.getText().toString().equals(mSettings.getString(et_user.getText() + "", ""))) {
-                Intent intent = new Intent(this, MainActivity.class);
-                startActivity(intent);
-                LogInActivity.this.finish();
+        String user = et_user.getText().toString();
+        String password = et_password.getText().toString();
+        if (!"".equals(user) && !"".equals(password)) {
+            if (userIsexists(user)) {
+                if(password.equals(getuserPassword(user))){
+                    Intent intent = new Intent(this, MainActivity.class);
+                    startActivity(intent);
+//                    LogInActivity.this.finish();
+                }else {
+                    showText(this,"密码不正确，请重新输入");
+                }
             } else {
-                showText(this, "请输入正确密码");
+                showText(this, "用户名不存在，请注册！");
             }
         } else {
-            if ("".equals(et_user.getText().toString())) {
+            if ("".equals(user)) {
                 showText(this, "请输入用户名");
-            } else if (!"".equals(et_user.getText().toString()) && "".equals(et_password.getText().toString())) {
+            } else if (!"".equals(user) && "".equals(password)) {
                 showText(this, "请输入密码");
             }
         }
     }
 
     private void register() {
-        if (!"".equals(et_user.getText().toString()) && !"".equals(et_password.getText().toString())) {
-            if (!"".equals(mSettings.getString("" + et_user.getText(), ""))) {
-                showText(this, "该用户名已存在，请输入密码登录");
-            } else {
-                editor.putString("" + et_user.getText().toString(), et_password.getText().toString());
-                editor.commit();
-                showText(this, "注册成功");
+        String user = et_user.getText().toString();
+        String password = et_password.getText().toString();
+        if (!"".equals(user) && !"".equals(password)) {
+            if(userIsexists(user)){
+                showText(this,"该用户已存在，请输入密码登录");
+            }else{
+                setUserPassword(user,password);
             }
         } else {
             showText(this, "请输入用户名和密码!");
@@ -144,7 +201,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     private void pass() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
-
     }
 
     @Override

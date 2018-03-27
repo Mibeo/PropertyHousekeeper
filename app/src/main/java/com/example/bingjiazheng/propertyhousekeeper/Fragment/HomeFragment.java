@@ -14,6 +14,7 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.TextView;
 
+import com.example.bingjiazheng.propertyhousekeeper.Activity.AddIncomeActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.AddSpendActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.LogInActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.MainActivity;
@@ -26,7 +27,7 @@ import static com.example.bingjiazheng.propertyhousekeeper.Activity.MainActivity
 public class HomeFragment extends Fragment {
     private static SharedPreferences mSettings;
     private static SharedPreferences.Editor editor;
-    private static TextView tv_life_select;
+    private static TextView tv_life;
     private GridView gridview;
 
     public static HomeFragment newInstance(String s) {
@@ -49,8 +50,8 @@ public class HomeFragment extends Fragment {
         editor = mSettings.edit();
         View view = inflater.inflate(R.layout.gridview, container, false);
         gridview = view.findViewById(R.id.gridview);
-        tv_life_select = view.findViewById(R.id.tv_life_select);
-        tv_life_select.setOnClickListener(new View.OnClickListener() {
+        tv_life = view.findViewById(R.id.tv_life);
+        tv_life.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.mDrawerLayout.openDrawer(mNavigationView);
@@ -60,19 +61,19 @@ public class HomeFragment extends Fragment {
         switch (mSettings.getInt("selected_life_dely", 6)) {
             case 0:
             case 6:
-                tv_life_select.setText("未选择");
+                tv_life.setText("当前人生阶段 : 未选择");
                 break;
             case 1:
-                tv_life_select.setText("学生");
+                tv_life.setText("当前人生阶段 : 学生");
                 break;
             case 2:
-                tv_life_select.setText("工作未婚");
+                tv_life.setText("当前人生阶段 : 工作未婚");
                 break;
             case 3:
-                tv_life_select.setText("工作已婚");
+                tv_life.setText("当前人生阶段 : 工作已婚");
                 break;
             case 4:
-                tv_life_select.setText("退休");
+                tv_life.setText("当前人生阶段 : 退休");
                 break;
         }
 
@@ -89,6 +90,8 @@ public class HomeFragment extends Fragment {
                         startActivity(intent);
                         break;
                     case "新增收入":
+                        Intent intent1 = new Intent(getContext(), AddIncomeActivity.class);
+                        startActivity(intent1);
                         break;
                     case "我的支出":
                         break;
@@ -114,27 +117,27 @@ public class HomeFragment extends Fragment {
             switch (msg.what) {
                 case 0:
                 case 6:
-                    tv_life_select.setText("未选择");
+                    tv_life.setText("当前人生阶段 : 未选择");
                     editor.putInt("selected_life", 0);
                     editor.commit();
                     break;
                 case 1:
-                    tv_life_select.setText("学生");
+                    tv_life.setText("当前人生阶段 : 学生");
                     editor.putInt("selected_life", 1);
                     editor.commit();
                     break;
                 case 2:
-                    tv_life_select.setText("工作未婚");
+                    tv_life.setText("当前人生阶段 : 工作未婚");
                     editor.putInt("selected_life", 2);
                     editor.commit();
                     break;
                 case 3:
-                    tv_life_select.setText("工作已婚");
+                    tv_life.setText("当前人生阶段 : 工作已婚");
                     editor.putInt("selected_life", 3);
                     editor.commit();
                     break;
                 case 4:
-                    tv_life_select.setText("退休");
+                    tv_life.setText("当前人生阶段 : 退休");
                     editor.putInt("selected_life", 4);
                     editor.commit();
                     break;
