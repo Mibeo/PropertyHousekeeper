@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="10dp"
+    android:orientation="vertical"
+    android:background="@mipmap/login"
+    android:id="@+id/ll">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="30sp"
+            android:textColor="@color/black"/>
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:padding="20dp"
+        android:orientation="vertical"
+
+        >
+
+        <RelativeLayout
+            android:id="@+id/ll1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="金 额 : "
+                android:layout_centerVertical="true"
+                style="@style/MyTextView"
+                android:id="@+id/textView" />
+
+            <EditText
+                android:id="@+id/et_money"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/textView"
+                android:inputType="numberDecimal"
+                android:theme="@style/MyEditText" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <TextView
+                android:id="@+id/tv1"
+                android:layout_centerVertical="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/MyTextView"
+                android:text="时 间 : "/>
+
+            <TextView
+                android:id="@+id/tv_time"
+                style="@style/MyTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/tv1"
+                android:clickable="true"
+                android:text="请选择时间" />
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/MyTextView"
+                android:text="类 别 : "
+                android:layout_centerVertical="true"
+                android:id="@+id/textView2" />
+
+            <Spinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/textView2"
+                android:layout_toEndOf="@+id/textView2" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                style="@style/MyTextView"
+                android:text="地 点 : "
+                android:id="@+id/textView3" />
+
+            <EditText
+                android:id="@+id/et_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/textView3"
+                android:theme="@style/MyEditText" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/MyTextView"
+                android:layout_centerVertical="true"
+                android:id="@+id/tv_payer_payee" />
+
+            <EditText
+                android:id="@+id/et_payer_payee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/tv_payer_payee"
+                android:theme="@style/MyEditText" />
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                style="@style/MyTextView"
+                android:layout_centerVertical="true"
+                android:text="备 注 : "
+                android:id="@+id/textView4" />
+
+            <EditText
+                android:id="@+id/et_remark"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toEndOf="@+id/textView4"
+                android:theme="@style/MyEditText" />
+        </RelativeLayout>
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+                <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/shape_bt_login"
+                    android:text="取 消"
+                    android:id="@+id/bt_cancel" />
+
+                <Button
+                    android:id="@+id/bt_save"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBaseline="@+id/bt_cancel"
+                    android:layout_alignBottom="@+id/bt_cancel"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/shape_bt_login"
+                    android:text="保 存" />
+            </RelativeLayout>
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

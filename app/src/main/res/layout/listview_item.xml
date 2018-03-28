@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp">
+
+    <TextView
+        android:id="@+id/tv_number"
+        style="@style/ListItemText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="1、" />
+
+    <TextView
+        android:id="@+id/tv_type"
+        style="@style/ListItemText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="12dp"
+        android:layout_toEndOf="@+id/tv_number"
+        android:text="食品烟酒" />
+
+    <TextView
+        android:id="@+id/tv_money"
+        style="@style/ListItemText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="26dp"
+        android:layout_toEndOf="@+id/tv_type"
+        android:text="80.0元" />
+
+    <TextView
+        android:id="@+id/tv_date"
+        style="@style/ListItemText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:text="2018-02-28" />
+</RelativeLayout>
