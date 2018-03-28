@@ -1,5 +1,7 @@
 package com.example.bingjiazheng.propertyhousekeeper.Activity;
 
+import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -36,11 +38,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NightModeHelper mNightModeHelper;
     private SharedPreferences mSettings;
     private SharedPreferences.Editor editor;
-
+    private String user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        overridePendingTransition(R.anim.left_to_right, R.anim.hold);
+//        overridePendingTransition(R.anim.left_to_right, R.anim.hold);
+        user = getIntent().getStringExtra("user");
         mSettings = PreferenceManager.getDefaultSharedPreferences(this);
         editor = mSettings.edit();
 //        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
@@ -79,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         android.support.v4.app.FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
         if (mTabLayoutFragment == null) {
-            mTabLayoutFragment = TabLayoutFragment.newInstance(getString(R.string.navigation_tab_layout));
+            mTabLayoutFragment = TabLayoutFragment.newInstance(getString(R.string.navigation_tab_layout),user);
         }
         transaction.replace(R.id.frame_content, mTabLayoutFragment);
         transaction.commit();
@@ -89,9 +92,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //        setNavigationViewChecked(3);
 
 //        setCurrentFragment();
-        setNavigationViewChecked(mSettings.getInt("selected_life", 6));
-        editor.putInt("selected_life_dely",mSettings.getInt("selected_life", 6));
-        editor.apply();
+        setNavigationViewChecked(mSettings.getInt("selected_life", 0));
+        editor.putInt("selected_life_dely",mSettings.getInt("selected_life", 0));
+        editor.commit();
+
     }
 
 
@@ -163,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.home:
+            /*case R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;
             case R.id.settings:
@@ -176,9 +180,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 //                newConfig.uiMode |= uiNightMode;
 //                getResources().updateConfiguration(newConfig, null);
 //                recreate();
-                return true;
+                return true;*/
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 0 && requestCode == RESULT_OK){
+            finish();
+        }
+    }
 }

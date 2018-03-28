@@ -1,7 +1,6 @@
 package com.example.bingjiazheng.propertyhousekeeper.Activity;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -19,16 +18,13 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.example.bingjiazheng.propertyhousekeeper.Entity.MySQLiteHelper;
 import com.example.bingjiazheng.propertyhousekeeper.R;
 import com.example.bingjiazheng.propertyhousekeeper.Ui.ImageViewPlus;
-import com.example.bingjiazheng.propertyhousekeeper.Utils.SpendManger;
-import com.example.bingjiazheng.propertyhousekeeper.Utils.utils;
+import com.example.bingjiazheng.propertyhousekeeper.Utils.DbManger;
 
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.ToastUtil.showText;
-import static com.example.bingjiazheng.propertyhousekeeper.Utils.utils.*;
 
 /**
  * Created by bingjia.zheng on 2018/3/21.
@@ -42,24 +38,22 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     private EditText et_user, et_password;
     private CheckBox checkBox;
     private RelativeLayout rl;
-    private TextView tv_pass;
-    private Context context;
     private MySQLiteHelper helper;
     private SQLiteDatabase sqLiteDatabase;
-    private String sql = "create table if not exists password_db(user varchar(20),password varchar(20))";
+    private String sql = "create table if not exists password_db(user varchar(20),new_password varchar(20),old_password varchar(20))";
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        overridePendingTransition(R.anim.left_to_right, R.anim.hold);
+//        overridePendingTransition(R.anim.left_to_right, R.anim.hold);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_login);
         initView();
     }
 
     private void initView() {
-        helper = SpendManger.getIntance(this);
+        helper = DbManger.getIntance(this);
         sqLiteDatabase = helper.getWritableDatabase();
         sqLiteDatabase.execSQL(sql);
         sqLiteDatabase.close();
@@ -71,8 +65,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         imageViewPlus.setImageResource(R.mipmap.head);
         rl = (RelativeLayout) findViewById(R.id.rl);
         rl.setOnClickListener(this);
-        tv_pass = (TextView) findViewById(R.id.tv_pass);
-        tv_pass.setOnClickListener(this);
         mSettings = PreferenceManager.getDefaultSharedPreferences(this);
         editor = mSettings.edit();
         et_user = (EditText) findViewById(R.id.et_user);
@@ -93,7 +85,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         if (!"".equals(mSettings.getString("TheLastUser", ""))) {
             et_user.setText(mSettings.getString("TheLastUser", ""));
             if (checkBox.isChecked()) {
-                et_password.setText(getuserPassword(et_user.getText().toString()));
+                et_password.setText(getUserOldPassword(et_user.getText().toString()));
             }
         }
 
@@ -101,7 +93,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
     private boolean userIsexists(String s) {
         sqLiteDatabase = helper.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.query("password_db", new String[]{"user,password"}, "user like ?", new String[]{"" + s}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query("password_db", new String[]{"user"}, "user like ?", new String[]{"" + s}, null, null, null);
         if (!cursor.moveToNext()) {
             cursor.close();
             sqLiteDatabase.close();
@@ -113,9 +105,20 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    private String getuserPassword(String s) {
+    private String getUserOldPassword(String s) {
         sqLiteDatabase = helper.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.query("password_db", new String[]{"user,password"}, "user like ?", new String[]{"" + s}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query("password_db", new String[]{"user,old_password"}, "user like ?", new String[]{"" + s}, null, null, null);
+        String string = null;
+        while (cursor.moveToNext()) {
+            string = cursor.getString(1);
+        }
+        cursor.close();
+        sqLiteDatabase.close();
+        return string;
+    }
+    private String getUserNewPassword(String s) {
+        sqLiteDatabase = helper.getWritableDatabase();
+        Cursor cursor = sqLiteDatabase.query("password_db", new String[]{"user,new_password"}, "user like ?", new String[]{"" + s}, null, null, null);
         String string = null;
         while (cursor.moveToNext()) {
             string = cursor.getString(1);
@@ -129,10 +132,11 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         sqLiteDatabase = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("user", "" + s1);
-        contentValues.put("password", "" + s2);
+        contentValues.put("new_password", "" + s2);
+        contentValues.put("old_password", "" + s2);
         sqLiteDatabase.insert("password_db", null, contentValues);
         sqLiteDatabase.close();
-        showText(this,"注册成功");
+        showText(this, "注册成功");
     }
 
     @Override
@@ -147,9 +151,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
             case R.id.rl:
                 hideSoftInput();//隐藏输入法
                 break;
-            case R.id.tv_pass:
-                pass();
-                break;
         }
     }
 
@@ -158,22 +159,21 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         String password = et_password.getText().toString();
         if (!"".equals(user) && !"".equals(password)) {
             if (userIsexists(user)) {
-                if(password.equals(getuserPassword(user))){
+                if (password.equals(getUserNewPassword(user))) {
                     Intent intent = new Intent(this, MainActivity.class);
+                    intent.putExtra("user", user);
                     startActivity(intent);
-//                    LogInActivity.this.finish();
-                }else {
-                    showText(this,"密码不正确，请重新输入");
+                    LogInActivity.this.finish();
+                } else {
+                    showText(this, "密码不正确，请重新输入");
                 }
             } else {
                 showText(this, "用户名不存在，请注册！");
             }
+        } else if (!"".equals(user) && "".equals(password)) {
+            showText(this, "请输入密码");
         } else {
-            if ("".equals(user)) {
-                showText(this, "请输入用户名");
-            } else if (!"".equals(user) && "".equals(password)) {
-                showText(this, "请输入密码");
-            }
+            showText(this, "请输入用户名和密码!");
         }
     }
 
@@ -181,15 +181,19 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         String user = et_user.getText().toString();
         String password = et_password.getText().toString();
         if (!"".equals(user) && !"".equals(password)) {
-            if(userIsexists(user)){
-                showText(this,"该用户已存在，请输入密码登录");
-            }else{
-                setUserPassword(user,password);
+            if (userIsexists(user)) {
+                showText(this, "该用户已存在，请登录");
+            } else {
+                setUserPassword(user, password);
             }
+        } else if (!"".equals(user) && "".equals(password)) {
+            showText(this, "请输入密码");
         } else {
             showText(this, "请输入用户名和密码!");
         }
+
     }
+
 
     private void hideSoftInput() {
         assert ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)) != null;
@@ -198,10 +202,6 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                         getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
     }
 
-    private void pass() {
-        Intent intent = new Intent(this, MainActivity.class);
-        startActivity(intent);
-    }
 
     @Override
     protected void onDestroy() {

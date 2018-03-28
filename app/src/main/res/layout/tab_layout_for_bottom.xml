@@ -14,7 +14,7 @@
         android:drawableTop="@drawable/home"
         android:text="@string/item_home"/>
 
-    <TextView
+    <!--<TextView
         android:id="@+id/tv_location"
         style="@style/viewpager_navigation_bar_tab_style"
         android:drawableTop="@drawable/location"
@@ -24,7 +24,7 @@
         android:id="@+id/tv_like"
         style="@style/viewpager_navigation_bar_tab_style"
         android:drawableTop="@drawable/like"
-        android:text="@string/item_like"/>
+        android:text="@string/item_like"/>-->
 
     <TextView
         android:id="@+id/tv_person"

@@ -1,5 +1,6 @@
 package com.example.bingjiazheng.propertyhousekeeper.Fragment;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,20 +19,26 @@ import com.example.bingjiazheng.propertyhousekeeper.Activity.AddIncomeActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.AddSpendActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.LogInActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.MainActivity;
+import com.example.bingjiazheng.propertyhousekeeper.Activity.MySpendActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Adapter.GridViewAdapter;
 import com.example.bingjiazheng.propertyhousekeeper.R;
 
 import static com.example.bingjiazheng.propertyhousekeeper.Activity.MainActivity.mNavigationView;
 
 
+@SuppressLint("ValidFragment")
 public class HomeFragment extends Fragment {
     private static SharedPreferences mSettings;
     private static SharedPreferences.Editor editor;
     private static TextView tv_life;
     private GridView gridview;
+    private String user;
+    public HomeFragment(String user) {
+        this.user = user;
+    }
 
-    public static HomeFragment newInstance(String s) {
-        HomeFragment homeFragment = new HomeFragment();
+    public static HomeFragment newInstance(String s,String user) {
+        HomeFragment homeFragment = new HomeFragment(user);
         Bundle bundle = new Bundle();
         bundle.putString("args", s);
         homeFragment.setArguments(bundle);
@@ -58,9 +65,9 @@ public class HomeFragment extends Fragment {
 //                MainActivity.myHandler.obtainMessage(MainActivity.SEND_MESSAGE,"obj from test case A").sendToTarget();
             }
         });
-        switch (mSettings.getInt("selected_life_dely", 6)) {
+        switch (mSettings.getInt("selected_life_dely", 5)) {
             case 0:
-            case 6:
+            case 5:
                 tv_life.setText("当前人生阶段 : 未选择");
                 break;
             case 1:
@@ -94,6 +101,8 @@ public class HomeFragment extends Fragment {
                         startActivity(intent1);
                         break;
                     case "我的支出":
+                        Intent intent2 = new Intent(getContext(),MySpendActivity.class);
+                        startActivity(intent2);
                         break;
                     case "我的收入":
                         break;

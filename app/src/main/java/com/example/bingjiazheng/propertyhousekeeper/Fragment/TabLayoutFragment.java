@@ -1,5 +1,6 @@
 package com.example.bingjiazheng.propertyhousekeeper.Fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -24,6 +25,7 @@ import java.util.List;
  * Description: Bottom Navigation Bar by TabLayout.
  */
 
+@SuppressLint("ValidFragment")
 public class TabLayoutFragment extends Fragment implements TabLayout.OnTabSelectedListener {
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -32,9 +34,15 @@ public class TabLayoutFragment extends Fragment implements TabLayout.OnTabSelect
     private TabLayoutFragmentAdapter mAdapter;
     private int[] mTabImgs = new int[]{R.drawable.home, R.drawable.location, R.drawable.like, R.drawable.person};
     private List<Fragment> mFragments = new ArrayList<>();
+    private String user;
 
-    public static TabLayoutFragment newInstance(String s) {
-        TabLayoutFragment tabLayoutFragment = new TabLayoutFragment();
+    @SuppressLint("ValidFragment")
+    public TabLayoutFragment(String user) {
+        this.user = user;
+    }
+
+    public static TabLayoutFragment newInstance(String s,String user) {
+        TabLayoutFragment tabLayoutFragment = new TabLayoutFragment(user);
         Bundle bundle = new Bundle();
         bundle.putString("args", s);
         tabLayoutFragment.setArguments(bundle);
@@ -74,7 +82,7 @@ public class TabLayoutFragment extends Fragment implements TabLayout.OnTabSelect
 
     private void setDefaultFragment() {
         getChildFragmentManager().beginTransaction()
-                .replace(R.id.sub_content, HomeFragment.newInstance(getString(R.string.item_home)))
+                .replace(R.id.sub_content, HomeFragment.newInstance(getString(R.string.item_home),user))
                 .commit();
     }
 
@@ -83,10 +91,10 @@ public class TabLayoutFragment extends Fragment implements TabLayout.OnTabSelect
      */
     public void initFragmentList() {
         mFragments.clear();
-        mFragments.add(HomeFragment.newInstance(getString(R.string.item_home)));
-        mFragments.add(LocationFragment.newInstance(getString(R.string.item_location)));
-        mFragments.add(LikeFragment.newInstance(getString(R.string.item_like)));
-        mFragments.add(PersonFragment.newInstance(getString(R.string.item_person)));
+        mFragments.add(HomeFragment.newInstance(getString(R.string.item_home),user));
+//        mFragments.add(LocationFragment.newInstance(getString(R.string.item_location)));
+//        mFragments.add(LikeFragment.newInstance(getString(R.string.item_like)));
+        mFragments.add(PersonFragment.newInstance(getString(R.string.item_person),user));
 
     }
 
@@ -96,8 +104,8 @@ public class TabLayoutFragment extends Fragment implements TabLayout.OnTabSelect
     private void initTabList() {
         mTabList.clear();
         mTabList.add("Home");
-        mTabList.add("Location");
-        mTabList.add("Like");
+//        mTabList.add("Location");
+//        mTabList.add("Like");
         mTabList.add("Me");
     }
 
@@ -125,11 +133,11 @@ public class TabLayoutFragment extends Fragment implements TabLayout.OnTabSelect
         String s = tabText.getText().toString();
         if ("Home".equals(s)) {
             tabIcon.setImageResource(R.drawable.home_fill);
-        } else if ("Location".equals(s)) {
+        } /*else if ("Location".equals(s)) {
             tabIcon.setImageResource(R.drawable.location_fill);
         } else if ("Like".equals(s)) {
             tabIcon.setImageResource(R.drawable.like_fill);
-        } else if ("Me".equals(s)) {
+        } */else if ("Me".equals(s)) {
             tabIcon.setImageResource(R.drawable.person_fill);
         }
     }
@@ -142,11 +150,11 @@ public class TabLayoutFragment extends Fragment implements TabLayout.OnTabSelect
         String s = tabText.getText().toString();
         if ("Home".equals(s)) {
             tabIcon.setImageResource(R.drawable.home);
-        } else if ("Location".equals(s)) {
+        } /*else if ("Location".equals(s)) {
             tabIcon.setImageResource(R.drawable.location);
         } else if ("Like".equals(s)) {
             tabIcon.setImageResource(R.drawable.like);
-        } else if ("Me".equals(s)) {
+        }*/ else if ("Me".equals(s)) {
             tabIcon.setImageResource(R.drawable.person);
         }
     }

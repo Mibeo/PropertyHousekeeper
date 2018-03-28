@@ -14,4 +14,6 @@
     <color name="Indigo_nav_color">#4675FF</color>
     <color name="gray">#808080</color>
     <color name="amber">#BBFFC107</color>
+    <color name="light_gray_press">#d9d9d9</color>
+    <color name="light_gray">#efebeb</color>
 </resources>
