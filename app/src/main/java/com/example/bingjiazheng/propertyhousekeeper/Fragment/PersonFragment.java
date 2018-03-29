@@ -77,7 +77,18 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         Cursor cursor = sqLiteDatabase.query("password_db", new String[]{"user,new_password"}, "user like ?", new String[]{"" + s}, null, null, null);
         String string = null;
         while (cursor.moveToNext()) {
-            string = cursor.getString(1);
+            string = cursor.getString(cursor.getColumnIndex("new_password"));
+        }
+        cursor.close();
+        sqLiteDatabase.close();
+        return string;
+    }
+    private String getUserOldPassword(String s) {
+        sqLiteDatabase = helper.getWritableDatabase();
+        Cursor cursor = sqLiteDatabase.query("password_db", new String[]{"user,old_password"}, "user like ?", new String[]{"" + s}, null, null, null);
+        String string = null;
+        while (cursor.moveToNext()) {
+            string = cursor.getString(cursor.getColumnIndex("old_password"));
         }
         cursor.close();
         sqLiteDatabase.close();
@@ -119,12 +130,12 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             @Override
             public void onClick(Dialog dialog, boolean confirm, final String editText) {
                 if (confirm) {
-                    if (editText.equals(getUserNewPassword(user))) {
+                    if (editText.equals(getUserOldPassword(user))) {
                         new ShowChangePassword(getActivity(), R.style.dialog, new ShowChangePassword.OnCloseListener() {
                             @Override
                             public void onClick(Dialog dialog, boolean confirm, final String editText) {
                                 if (confirm) {
-                                    if(editText.equals(getUserNewPassword(user))){
+                                    if(editText.equals(getUserOldPassword(user))){
                                         showText(getContext(),"该密码已存在，请输入其他密码");
                                     }else{
                                         updatePassword(editText);
@@ -135,7 +146,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                                     dialog.dismiss();
                                 }
                             }
-                        }).setTitle("请输入密码").show();
+                        }).setTitle("请输入新密码").show();
                         dialog.dismiss();
                     } else {
                         showText(getContext(),"密码错误，请重新输入");

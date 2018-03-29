@@ -107,7 +107,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
     private String getUserOldPassword(String s) {
         sqLiteDatabase = helper.getWritableDatabase();
-        Cursor cursor = sqLiteDatabase.query("password_db", new String[]{"user,old_password"}, "user like ?", new String[]{"" + s}, null, null, null);
+        Cursor cursor = sqLiteDatabase.query("password_db", new String[]{"user,old_password"}, "user like ?", new String[]{s}, null, null, null);
         String string = null;
         while (cursor.moveToNext()) {
             string = cursor.getString(1);
@@ -138,7 +138,20 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         sqLiteDatabase.close();
         showText(this, "注册成功");
     }
-
+    private void updateUserOldPassword(String user,String password) {
+        sqLiteDatabase = helper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("old_password", password);
+        sqLiteDatabase.update("password_db", contentValues,"user="+user,null);
+        sqLiteDatabase.close();
+    }
+    /*private void updatePassword(String password){
+        sqLiteDatabase = helper.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("new_password",password);
+        sqLiteDatabase.update("password_db",contentValues,"user="+user,null);
+        sqLiteDatabase.close();
+    }*/
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -160,6 +173,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         if (!"".equals(user) && !"".equals(password)) {
             if (userIsexists(user)) {
                 if (password.equals(getUserNewPassword(user))) {
+                    updateUserOldPassword(user,password);
                     Intent intent = new Intent(this, MainActivity.class);
                     intent.putExtra("user", user);
                     startActivity(intent);

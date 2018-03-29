@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -42,13 +43,17 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
     protected Spinner spinner;
     protected LinearLayout ll;
     protected Context context;
-    protected String s;
+    protected String table;
     protected MySQLiteHelper helper;
     protected SQLiteDatabase sqLiteDatabase;
+    protected String user;
+    protected String type;
+    private RelativeLayout iv_back;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        overridePendingTransition(R.anim.left_to_right, R.anim.hold);
         setContentView(R.layout.activity_spend_income);
         mNightModeHelper = new NightModeHelper(this, R.style.BaseTheme);
         initview();
@@ -62,7 +67,9 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
         tv_time.setOnClickListener(this);
         tv_Title = findViewById(R.id.tv_Title);
         tv_payer_payee = findViewById(R.id.tv_payer_payee);
-        setVeiw();
+        iv_back =findViewById(R.id.iv_back);
+        iv_back.setOnClickListener(this);
+        init();
         /*tv_payer_payee.setText("收 方 : ");
         tv_Title.setText("新增支出");*/
         et_money = findViewById(R.id.et_money);
@@ -91,24 +98,25 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
         adapter.setDatas(datas);*/
     }
 
-    abstract IInterface setVeiw();
+    abstract IInterface init();
+
     abstract IInterface setAdapter();
 
-    protected void addSpendItem(String user, int life, double money, String time, String type,
+    protected void addSpendItem(String user, int life, double money, String date, String type,
                                 String address, String payer_payee, String remark) {
         sqLiteDatabase = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("user", user);
         contentValues.put("life", life);
         contentValues.put("money", money);
-        contentValues.put("time", time);
+        contentValues.put("date", date);
         contentValues.put("type", type);
         contentValues.put("address", address);
         contentValues.put("payer_payee", payer_payee);
         contentValues.put("remark", remark);
-        sqLiteDatabase.insert(s, null, contentValues);
+        sqLiteDatabase.insert(table, null, contentValues);
         sqLiteDatabase.close();
-        showText(this,"保存成功");
+        showText(this, "保存成功");
     }
 
     /* protected String sql1 = "create table if not exists spend_db(user varchar(20),life integer,money decimal,time varchar(10),type varchar(10),address varchar(100),payer_payee varchar(50),remark varchar(200))";
@@ -128,6 +136,7 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
             case R.id.bt_save:
                 save();
                 break;
+            case R.id.iv_back:
             case R.id.bt_cancel:
                 finish();
                 break;
@@ -136,7 +145,7 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
 
     private void save() {
         if (!et_money.getText().toString().equals("")) {
-            addSpendItem("小明", 1, Double.valueOf(et_money.getText().toString()), tv_time.getText().toString(), "日用品",
+            addSpendItem(user, 1, Double.valueOf(et_money.getText().toString()), tv_time.getText().toString(), spinner.getSelectedItem() + "",
                     et_address.getText().toString(), et_payer_payee.getText().toString(), et_remark.getText().toString());
         }
     }

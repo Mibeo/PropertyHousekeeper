@@ -48,13 +48,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         editor = mSettings.edit();
 //        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
         mNightModeHelper = new NightModeHelper(this, R.style.BaseTheme);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.layout_test);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mToolbar = (Toolbar) findViewById(R.id.tool_bar);
         mToolbar.setTitle("财产管家");
         mNavigationView = (NavigationView) findViewById(R.id.navigation_view);
 
         setSupportActionBar(mToolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //创建抽屉的开关，将mToolbar和mDrawerLayout作为参数传递给它
@@ -66,8 +67,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         mDrawerLayout.setStatusBarBackgroundColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
 
-        View headerView = mNavigationView.getHeaderView(0);
-        headerView.setOnClickListener(this);
+//        View headerView = mNavigationView.getHeaderView(0);
+//        headerView.setOnClickListener(this);
         mNavigationView.setItemIconTintList(null);
         //设置mNavigationView的menu监听
         mNavigationView.setNavigationItemSelectedListener(this);
@@ -93,8 +94,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 //        setCurrentFragment();
         setNavigationViewChecked(mSettings.getInt("selected_life", 0));
-        editor.putInt("selected_life_dely",mSettings.getInt("selected_life", 0));
-        editor.commit();
+//        editor.putInt("selected_life_dely",mSettings.getInt("selected_life", 0));
+//        editor.commit();
 
     }
 
@@ -185,10 +186,4 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 0 && requestCode == RESULT_OK){
-            finish();
-        }
-    }
 }

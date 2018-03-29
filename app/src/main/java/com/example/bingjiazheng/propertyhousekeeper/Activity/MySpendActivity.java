@@ -10,7 +10,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import com.example.bingjiazheng.propertyhousekeeper.Adapter.ListviewAdapter;
 import com.example.bingjiazheng.propertyhousekeeper.R;
@@ -23,7 +25,7 @@ import java.util.List;
  */
 
 public class MySpendActivity extends AppCompatActivity {
-
+    private RelativeLayout iv_back;
 //    private ListView listView=null;
 
     //listview的数据填充器
@@ -42,6 +44,7 @@ public class MySpendActivity extends AppCompatActivity {
     private Handler handler;
     private ListView listView;
     private ListviewAdapter listviewAdapter;
+    private String user;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,17 +53,30 @@ public class MySpendActivity extends AppCompatActivity {
         initView();
     }
 
+    @Override
+    protected void onDestroy() {
+        listviewAdapter.notifyDataSetChanged();
+        super.onDestroy();
+    }
+
     private void initView() {
         /*listView = findViewById(R.id.listview);
         ListviewAdapter listviewAdapter = new ListviewAdapter(this);
         listView.setAdapter(listviewAdapter);*/
-
+        user = getIntent().getStringExtra("user");
         v=this.getLayoutInflater().inflate(R.layout.list_refresh, null);
         listView=(ListView) super.findViewById(R.id.listview);
+        iv_back = findViewById(R.id.iv_back);
+        iv_back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         //得到数据
-        data=DataServer.getData(0,10);
+//        data=DataServer.getData();
         //实习化ArrayAdapter对象
-        listviewAdapter = new ListviewAdapter(this,DataServer.getData(1,10));
+        listviewAdapter = new ListviewAdapter(this,user);
 
 //        adapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, data);
         //添加listview的脚跟视图，这个方法必须在listview.setAdapter()方法之前，否则无法显示视图
@@ -70,43 +86,35 @@ public class MySpendActivity extends AppCompatActivity {
         //当下一页的数据加载完成之后移除改视图
         listView.removeFooterView(v);
         //当用户滑动listview到最后一项是，动态的加载第二页的数据
-        listView.setOnScrollListener(new AbsListView.OnScrollListener()
-        {
-            public void onScrollStateChanged(AbsListView view, int scrollState)
-            {
+        /*listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
                 // TODO Auto-generated method stub
             }
             @Override
-            public void onScroll(AbsListView view, int firstVisibleItem,int visibleItemCount, final int totalItemCount)
-            {
+            public void onScroll(AbsListView view, int firstVisibleItem,int visibleItemCount, final int totalItemCount) {
                 //得到listview最后一项的id
                 int lastItemId=listView.getLastVisiblePosition();
                 //判断用户是否滑动到最后一项，因为索引值从零开始所以要加上1
-                if((lastItemId+1)==totalItemCount)
-                {
-                    /**
-                     * 计算当前页，因为每一页只加载十条数据，所以总共加载的数据除以每一页的数据的个数
-                     * 如果余数为零则当前页为currentPage=totalItemCount/number；
-                     * 如果不能整除则当前页为(int)(totalItemCount/number)+1;
-                     * 下一页则是当前页加1
-                     */
+                if((lastItemId+1)==totalItemCount) {
+//                    *
+//                     * 计算当前页，因为每一页只加载十条数据，所以总共加载的数据除以每一页的数据的个数
+//                     * 如果余数为零则当前页为currentPage=totalItemCount/number；
+//                     * 如果不能整除则当前页为(int)(totalItemCount/number)+1;
+//                     * 下一页则是当前页加1
+
                     int currentPage=totalItemCount%number;
-                    if(currentPage==0)
-                    {
+                    if(currentPage==0) {
                         currentPage=totalItemCount/number;
                     }
-                    else
-                    {
+                    else {
                         currentPage=(int)(totalItemCount/number)+1;
                     }
                     System.out.println("当前页为："+currentPage);
                     nextpage=currentPage+1;
                     //当总共的数据大于0是才加载数据
-                    if(totalItemCount>0)
-                    {
+                    if(totalItemCount>0) {
                         //判断当前页是否超过最大页，以及上一页的数据是否加载完成
-                        if(nextpage<=maxpage && loadfinish )
-                        {
+                        if(nextpage<=maxpage && loadfinish ) {
                             //添加页脚视图
                             listView.addFooterView(v);
                             loadfinish=false;
@@ -115,14 +123,12 @@ public class MySpendActivity extends AppCompatActivity {
                                 public void run()
                                 {
                                     try {
-
                                         Thread.sleep(2000);
                                     } catch (InterruptedException e) {
-                                        // TODO Auto-generated catch block
                                         e.printStackTrace();
                                     }
                                     //获取当前加载页的数据
-                                    data=DataServer.getData(totalItemCount, 10);
+                                    data=DataServer.getData(totalItemCount, 20);
                                     //通知listview改变UI中的数据
                                     handler.sendEmptyMessage(0);
                                 }
@@ -137,30 +143,28 @@ public class MySpendActivity extends AppCompatActivity {
                 //判断加载的数据的页数有没有超过最大页，并且是否已经记载完成
 
             }
-        });
+        });*/
         handler=new Handler()
         {
             @SuppressLint("HandlerLeak")
             public void handleMessage(Message msg)
             {
-                if(msg.what==0)
-                {
+                if(msg.what==0) {
                     //通知listview中的数据已经改动
                     listviewAdapter.notifyDataSetChanged();
                     loadfinish=true;
                 }
                 super.handleMessage(msg);
                 //判断listview中的页脚视图是否存在，如果存在在删除页脚视图
-                if(listView.getFooterViewsCount()!=0)
-                {
+                if(listView.getFooterViewsCount()!=0) {
                     listView.removeFooterView(v);
                 }
             }
         };
     }
     //异步加载数据
-    @SuppressWarnings("unused")
-    private final class AsyncTaskLoadData extends AsyncTask<Object, Object, Object>
+//    @SuppressWarnings("unused")
+    /*private final class AsyncTaskLoadData extends AsyncTask<Object, Object, Object>
     {
         private int count;
         private List<String> list;
@@ -194,5 +198,5 @@ public class MySpendActivity extends AppCompatActivity {
         }
 
 
-    }
+    }*/
 }

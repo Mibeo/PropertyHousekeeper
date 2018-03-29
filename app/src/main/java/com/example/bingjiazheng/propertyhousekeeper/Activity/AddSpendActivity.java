@@ -14,17 +14,17 @@ import java.util.List;
 
 public class AddSpendActivity extends Spend_IncomeActivity {
 
-    protected String sql1 = "create table if not exists spend_db(user varchar(20),life integer,money decimal,time varchar(10),type varchar(10),address varchar(100),payer_payee varchar(50),remark varchar(200))";
+    protected String sql1 = "create table if not exists spend_db(user varchar(20),life integer,money decimal,date varchar(10),type varchar(10),address varchar(100),payer_payee varchar(50),remark varchar(200))";
     private int life_stage = 1;
-
     @Override
-    IInterface setVeiw() {
+    IInterface init() {
+        user = getIntent().getStringExtra("user");
         helper = DbManger.getIntance(this);
         sqLiteDatabase = helper.getWritableDatabase();
         sqLiteDatabase.execSQL(sql1);
         tv_payer_payee.setText("收 方 : ");
         tv_Title.setText("新增支出");
-        super.s = "spend_db";
+        super.table = "spend_db";
         return null;
     }
 
@@ -50,6 +50,7 @@ public class AddSpendActivity extends Spend_IncomeActivity {
         adapter.setDatas(datas);
         return null;
     }
+
 
     private void retire(List<String> datas) {
         datas.add("食品烟酒");

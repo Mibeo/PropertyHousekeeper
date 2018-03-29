@@ -37,6 +37,11 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity
+            android:name=".Activity.AddNewNoteActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
 
     </application>
 

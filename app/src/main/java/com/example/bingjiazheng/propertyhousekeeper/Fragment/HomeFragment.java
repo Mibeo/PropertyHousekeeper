@@ -16,6 +16,7 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.example.bingjiazheng.propertyhousekeeper.Activity.AddIncomeActivity;
+import com.example.bingjiazheng.propertyhousekeeper.Activity.AddNewNoteActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.AddSpendActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.LogInActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.MainActivity;
@@ -24,6 +25,7 @@ import com.example.bingjiazheng.propertyhousekeeper.Adapter.GridViewAdapter;
 import com.example.bingjiazheng.propertyhousekeeper.R;
 
 import static com.example.bingjiazheng.propertyhousekeeper.Activity.MainActivity.mNavigationView;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.ToastUtil.showText;
 
 
 @SuppressLint("ValidFragment")
@@ -33,11 +35,12 @@ public class HomeFragment extends Fragment {
     private static TextView tv_life;
     private GridView gridview;
     private String user;
+
     public HomeFragment(String user) {
         this.user = user;
     }
 
-    public static HomeFragment newInstance(String s,String user) {
+    public static HomeFragment newInstance(String s, String user) {
         HomeFragment homeFragment = new HomeFragment(user);
         Bundle bundle = new Bundle();
         bundle.putString("args", s);
@@ -46,11 +49,11 @@ public class HomeFragment extends Fragment {
     }
 
     private int[] imagesID = new int[]{R.mipmap.head, R.mipmap.head, R.mipmap.head,
-            R.mipmap.head,R.mipmap.head,R.mipmap.head,R.mipmap.head};
-    private String[] grid_list = {"新增支出", "新增收入", "我的支出", "我的收入","数据管理","数据分析","收支便签"};
+            R.mipmap.head, R.mipmap.head, R.mipmap.head, R.mipmap.head};
+    private String[] grid_list = {"新增支出", "新增收入", "我的支出", "我的收入", "数据管理", "数据分析", "收支便签"};
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         mSettings = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -65,7 +68,7 @@ public class HomeFragment extends Fragment {
 //                MainActivity.myHandler.obtainMessage(MainActivity.SEND_MESSAGE,"obj from test case A").sendToTarget();
             }
         });
-        switch (mSettings.getInt("selected_life_dely", 5)) {
+        switch (mSettings.getInt("selected_life", 5)) {
             case 0:
             case 5:
                 tv_life.setText("当前人生阶段 : 未选择");
@@ -93,16 +96,34 @@ public class HomeFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (grid_list[position]) {
                     case "新增支出":
-                        Intent intent = new Intent(getContext(), AddSpendActivity.class);
-                        startActivity(intent);
+                        if (0 != mSettings.getInt("selected_life", 0)) {
+                            Intent intent = new Intent(getContext(), AddSpendActivity.class);
+                            intent.putExtra("user",user);
+                            startActivity(intent);
+                        } else {
+                            showText(getActivity(), "请选择人生阶段");
+                            MainActivity.mDrawerLayout.openDrawer(mNavigationView);
+                        }
                         break;
                     case "新增收入":
-                        Intent intent1 = new Intent(getContext(), AddIncomeActivity.class);
-                        startActivity(intent1);
+                        if (0 != mSettings.getInt("selected_life", 0)) {
+                            Intent intent = new Intent(getContext(), AddIncomeActivity.class);
+                            intent.putExtra("user", user);
+                            startActivity(intent);
+                        } else {
+                            showText(getActivity(), "请选择人生阶段");
+                            MainActivity.mDrawerLayout.openDrawer(mNavigationView);
+                        }
                         break;
                     case "我的支出":
-                        Intent intent2 = new Intent(getContext(),MySpendActivity.class);
-                        startActivity(intent2);
+                        if (0 != mSettings.getInt("selected_life", 0)) {
+                            Intent intent = new Intent(getContext(), MySpendActivity.class);
+                            intent.putExtra("user", user);
+                            startActivity(intent);
+                        } else {
+                            showText(getActivity(), "请选择人生阶段");
+                            MainActivity.mDrawerLayout.openDrawer(mNavigationView);
+                        }
                         break;
                     case "我的收入":
                         break;
@@ -111,6 +132,14 @@ public class HomeFragment extends Fragment {
                     case "数据分析":
                         break;
                     case "收支便签":
+                        if (0 != mSettings.getInt("selected_life", 0)) {
+                            Intent intent = new Intent(getContext(), AddNewNoteActivity.class);
+                            intent.putExtra("user",user);
+                            startActivity(intent);
+                        } else {
+                            showText(getActivity(), "请选择人生阶段");
+                            MainActivity.mDrawerLayout.openDrawer(mNavigationView);
+                        }
                         break;
                 }
                 adapter.setSelection(position);
