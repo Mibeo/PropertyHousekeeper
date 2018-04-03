@@ -16,6 +16,27 @@ import java.util.List;
 public class AddIncomeActivity extends Spend_IncomeActivity {
     protected String sql2 = "create table if not exists income_db(user varchar(20),life integer,money decimal,date varchar(10),type varchar(10),address varchar(100),payer_payee varchar(50),remark varchar(200))";
     private int life_stage = 1;
+
+
+    @Override
+    IInterface getData() {
+        switch (life_stage){
+            case 1:
+                student(data);
+                break;
+            case 2:
+                workunmarried(data);
+                break;
+            case 3:
+                workmarried(data);
+                break;
+            case 4:
+                retire(data);
+                break;
+        }
+        return null;
+    }
+
     @Override
     IInterface init() {
         user = getIntent().getStringExtra("user");
@@ -28,7 +49,7 @@ public class AddIncomeActivity extends Spend_IncomeActivity {
         return null;
     }
 
-    @Override
+    /*@Override
     IInterface setAdapter() {
         List<String> datas = new ArrayList<>();
         switch (life_stage){
@@ -49,7 +70,7 @@ public class AddIncomeActivity extends Spend_IncomeActivity {
         spinner.setAdapter(adapter);
         adapter.setDatas(datas);
         return null;
-    }
+    }*/
 
 
 

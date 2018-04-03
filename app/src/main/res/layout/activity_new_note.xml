@@ -1,50 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/tool_bar"
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="@color/colorPrimary"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        >
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-            <RelativeLayout
-                android:clickable="true"
-                android:focusable="true"
-                android:id="@+id/iv_back"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
-                android:background="@drawable/back_selector"
-                android:layout_centerVertical="true">
-                <ImageView
-                    android:clickable="false"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
-                    android:layout_centerInParent="true"
-                    android:background="@mipmap/back"/>
-            </RelativeLayout>
-
-            <TextView
-                android:layout_marginStart="40dp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="20sp"
-                android:layout_centerVertical="true"
-                android:textColor="@color/white"
-                android:text="收支便签"/>
-        </RelativeLayout>
-    </android.support.v7.widget.Toolbar>
+    <include layout="@layout/layout_content_toolbar"
+        android:id="@+id/ly"/>
     <EditText
+        android:id="@+id/et_text"
+        android:layout_below="@id/ly"
         android:layout_width="match_parent"
         android:padding="20dp"
         android:layout_height="match_parent"
         android:gravity="top"
         android:inputType="textMultiLine"
         android:background="@null"
-        android:lineSpacingMultiplier="1.4"
-        android:text="收支便签收支便签收支便签收支便签收支便签收支便签收支便签收支便签收支便签收支便签"/>
-</LinearLayout>
+        android:lineSpacingMultiplier="1.4"/>
+    <ImageView
+        android:id="@+id/iv_save"
+        android:clickable="true"
+        android:focusable="true"
+        android:layout_width="26dp"
+        android:layout_height="26dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="15dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/save_selector"/>
+</RelativeLayout>

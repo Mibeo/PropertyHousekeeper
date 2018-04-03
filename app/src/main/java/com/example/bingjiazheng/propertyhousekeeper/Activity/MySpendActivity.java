@@ -1,20 +1,27 @@
 package com.example.bingjiazheng.propertyhousekeeper.Activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.bingjiazheng.propertyhousekeeper.Adapter.ListviewAdapter;
+import com.example.bingjiazheng.propertyhousekeeper.Entity.SingleInfo;
 import com.example.bingjiazheng.propertyhousekeeper.R;
 
 import java.util.ArrayList;
@@ -26,7 +33,6 @@ import java.util.List;
 
 public class MySpendActivity extends AppCompatActivity {
     private RelativeLayout iv_back;
-//    private ListView listView=null;
 
     //listview的数据填充器
     private ArrayAdapter<String> adapter;
@@ -35,16 +41,20 @@ public class MySpendActivity extends AppCompatActivity {
     //下一页初始化为0
     int nextpage = 0;
     //每一页记载多少数据
-    private int number=10;
+    private int number = 10;
     //最多有几页
-    private int maxpage=5;
+    private int maxpage = 5;
     //用来判断是否加载完成
-    private boolean loadfinish=true;
+    private boolean loadfinish = true;
     private View v;
     private Handler handler;
     private ListView listView;
     private ListviewAdapter listviewAdapter;
     private String user;
+    private Spinner spinner;
+    private TextView tv_Title;
+    private int life;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,13 +69,25 @@ public class MySpendActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
+    public List<String> getDataSource() {
+        List<String> spinnerList = new ArrayList<String>();
+        spinnerList.add("学生");
+        spinnerList.add("工作未婚");
+        spinnerList.add("工作已婚");
+        spinnerList.add("退休");
+        return spinnerList;
+    }
+
     private void initView() {
         /*listView = findViewById(R.id.listview);
         ListviewAdapter listviewAdapter = new ListviewAdapter(this);
         listView.setAdapter(listviewAdapter);*/
         user = getIntent().getStringExtra("user");
-        v=this.getLayoutInflater().inflate(R.layout.list_refresh, null);
-        listView=(ListView) super.findViewById(R.id.listview);
+        life = getIntent().getIntExtra("life",0);
+        v = this.getLayoutInflater().inflate(R.layout.list_refresh, null);
+        listView = (ListView) super.findViewById(R.id.listview);
+        tv_Title = findViewById(R.id.tv_Title);
+        tv_Title.setText("我的支出");
         iv_back = findViewById(R.id.iv_back);
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -73,10 +95,17 @@ public class MySpendActivity extends AppCompatActivity {
                 finish();
             }
         });
+        spinner = findViewById(R.id.spinner);
+        ArrayAdapter<String> spinnerAadapter = new ArrayAdapter<String>(this,
+                R.layout.custom_spiner_text_item2, getDataSource());
+        spinnerAadapter
+                .setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAadapter);
+        spinner.setSelection(life-1);
         //得到数据
 //        data=DataServer.getData();
         //实习化ArrayAdapter对象
-        listviewAdapter = new ListviewAdapter(this,user);
+        listviewAdapter = new ListviewAdapter(this, user);
 
 //        adapter=new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, android.R.id.text1, data);
         //添加listview的脚跟视图，这个方法必须在listview.setAdapter()方法之前，否则无法显示视图
@@ -85,6 +114,24 @@ public class MySpendActivity extends AppCompatActivity {
         listView.setAdapter(listviewAdapter);
         //当下一页的数据加载完成之后移除改视图
         listView.removeFooterView(v);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                Intent intent = new Intent(getApplicationContext(),ModifyDeleteActivity.class);
+//                Log.e("data.get", String.valueOf(data));
+//                intent.putExtra("data",data.get(position));
+//                startActivity(intent);
+
+                SingleInfo singleInfo = (SingleInfo)parent.getItemAtPosition(position);
+                Intent intent  = new Intent(MySpendActivity.this,ModifyDeleteActivity.class);
+                Log.e("Log",singleInfo.getType()+singleInfo.getAddress()+singleInfo.getRemark()+singleInfo.getMoney());
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("singleInfo",singleInfo);
+                intent.putExtras(bundle);
+                intent.putExtra("data",bundle);
+                startActivity(intent);
+            }
+        });
         //当用户滑动listview到最后一项是，动态的加载第二页的数据
         /*listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -144,19 +191,17 @@ public class MySpendActivity extends AppCompatActivity {
 
             }
         });*/
-        handler=new Handler()
-        {
+        handler = new Handler() {
             @SuppressLint("HandlerLeak")
-            public void handleMessage(Message msg)
-            {
-                if(msg.what==0) {
+            public void handleMessage(Message msg) {
+                if (msg.what == 0) {
                     //通知listview中的数据已经改动
                     listviewAdapter.notifyDataSetChanged();
-                    loadfinish=true;
+                    loadfinish = true;
                 }
                 super.handleMessage(msg);
                 //判断listview中的页脚视图是否存在，如果存在在删除页脚视图
-                if(listView.getFooterViewsCount()!=0) {
+                if (listView.getFooterViewsCount() != 0) {
                     listView.removeFooterView(v);
                 }
             }

@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -49,6 +50,7 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
     protected String user;
     protected String type;
     private RelativeLayout iv_back;
+    protected List<String> data;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,7 +69,7 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
         tv_time.setOnClickListener(this);
         tv_Title = findViewById(R.id.tv_Title);
         tv_payer_payee = findViewById(R.id.tv_payer_payee);
-        iv_back =findViewById(R.id.iv_back);
+        iv_back = findViewById(R.id.iv_back);
         iv_back.setOnClickListener(this);
         init();
         /*tv_payer_payee.setText("收 方 : ");
@@ -88,7 +90,16 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
         mDay = ca.get(Calendar.DAY_OF_MONTH);
         display();
         spinner = (Spinner) findViewById(R.id.spinner);
-        setAdapter();
+        // 在这里两个layout自已定义效果,不用系统自带.
+        // 数据源手动添加
+
+        getDataSource();
+        ArrayAdapter<String> spinnerAadapter = new ArrayAdapter<String>(this,
+                R.layout.custom_spiner_text_item, getDataSource());
+        spinnerAadapter
+                .setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
+        spinner.setAdapter(spinnerAadapter);
+//        setAdapter();
         /*datas = new ArrayList<>();
         *//*for (int i = 0; i < 10; i++) {
             datas.add("项目" + i);
@@ -98,9 +109,23 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
         adapter.setDatas(datas);*/
     }
 
+    public List<String> getDataSource() {
+        data = new ArrayList<>();
+        getData();
+        /*spinnerList.add("北京");
+        spinnerList.add("上海");
+        spinnerList.add("广州");
+        spinnerList.add("北京");
+        spinnerList.add("上海");
+        spinnerList.add("广州");*/
+        return data;
+    }
+
+    abstract IInterface getData();
+
     abstract IInterface init();
 
-    abstract IInterface setAdapter();
+//    abstract IInterface setAdapter();
 
     protected void addSpendItem(String user, int life, double money, String date, String type,
                                 String address, String payer_payee, String remark) {
@@ -147,6 +172,8 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
         if (!et_money.getText().toString().equals("")) {
             addSpendItem(user, 1, Double.valueOf(et_money.getText().toString()), tv_time.getText().toString(), spinner.getSelectedItem() + "",
                     et_address.getText().toString(), et_payer_payee.getText().toString(), et_remark.getText().toString());
+        }else{
+            showText(this,"请输入金额数");
         }
     }
 

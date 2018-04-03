@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.text.InputType;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.example.bingjiazheng.propertyhousekeeper.Entity.MySQLiteHelper;
@@ -33,15 +35,16 @@ import static com.example.bingjiazheng.propertyhousekeeper.Utils.ToastUtil.showT
 public class LogInActivity extends AppCompatActivity implements View.OnClickListener {
     private Button bt_login, bt_register;
     private ImageViewPlus imageViewPlus;
+    private ImageView iv_eye;
     private SharedPreferences mSettings;
     private SharedPreferences.Editor editor;
     private EditText et_user, et_password;
     private CheckBox checkBox;
-    private RelativeLayout rl;
+    private RelativeLayout rl,rl_visible;
     private MySQLiteHelper helper;
     private SQLiteDatabase sqLiteDatabase;
     private String sql = "create table if not exists password_db(user varchar(20),new_password varchar(20),old_password varchar(20))";
-
+    private boolean isHide;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,14 +64,23 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         bt_login.setOnClickListener(this);
         bt_register = (Button) findViewById(R.id.bt_register);
         bt_register.setOnClickListener(this);
+        et_password = (EditText) findViewById(R.id.et_password);
         imageViewPlus = findViewById(R.id.image_head);
         imageViewPlus.setImageResource(R.mipmap.head);
         rl = (RelativeLayout) findViewById(R.id.rl);
         rl.setOnClickListener(this);
+        iv_eye = findViewById(R.id.iv_eye);
         mSettings = PreferenceManager.getDefaultSharedPreferences(this);
         editor = mSettings.edit();
+        if(mSettings.getBoolean("visible",false)){
+            iv_eye.setImageResource(R.mipmap.visible);
+            et_password.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        }else{
+            iv_eye.setImageResource(R.mipmap.invisible);
+            et_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }
         et_user = (EditText) findViewById(R.id.et_user);
-        et_password = (EditText) findViewById(R.id.et_password);
+
         checkBox = (CheckBox) findViewById(R.id.checkbox);
         checkBox.setChecked(mSettings.getBoolean("RememberPassword", false));
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -88,7 +100,8 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
                 et_password.setText(getUserOldPassword(et_user.getText().toString()));
             }
         }
-
+        rl_visible = findViewById(R.id.rl_visible);
+        rl_visible.setOnClickListener(this);
     }
 
     private boolean userIsexists(String s) {
@@ -164,7 +177,23 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
             case R.id.rl:
                 hideSoftInput();//隐藏输入法
                 break;
+            case R.id.rl_visible:
+                hidePassword();
+                break;
         }
+    }
+
+    private void hidePassword() {
+        if(mSettings.getBoolean("visible",false)){
+            editor.putBoolean("visible",false);
+            iv_eye.setImageResource(R.mipmap.invisible);
+            et_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }else {
+            editor.putBoolean("visible",true);
+            iv_eye.setImageResource(R.mipmap.visible);
+            et_password.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        }
+        editor.apply();
     }
 
     private void login() {

@@ -41,6 +41,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private SQLiteDatabase sqLiteDatabase;
     private MySQLiteHelper helper;
 
+    public PersonFragment(){}
     @SuppressLint("ValidFragment")
     public PersonFragment(String user) {
         this.user = user;

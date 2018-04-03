@@ -1,12 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/light_gray"
     android:orientation="vertical">
 
-    <include layout="@layout/layout_content_toolbar"/>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tool_bar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/iv_back"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/back_selector"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:layout_centerInParent="true"
+                    android:background="@mipmap/back"
+                    android:clickable="false" />
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_Title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="20dp"
+                android:layout_toEndOf="@id/iv_back"
+                android:text="支出详情"
+                android:textColor="@color/white"
+                android:textSize="20sp" />
+        </RelativeLayout>
+    </android.support.v7.widget.Toolbar>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -20,21 +57,22 @@
             android:layout_height="50dp">
 
             <TextView
-                android:id="@+id/textView"
+               android:id="@+id/tv1"
                 style="@style/MyTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="金 额 : " />
 
-            <EditText
-                android:id="@+id/et_money"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tv_money"
+                style="@style/MyTextView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_toEndOf="@+id/textView"
-                android:inputType="numberDecimal"
-                android:theme="@style/MyEditText" />
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/tv1"
+                android:text="无" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -43,7 +81,7 @@
             android:layout_marginTop="5dp">
 
             <TextView
-                android:id="@+id/tv1"
+                android:id="@+id/tv2"
                 style="@style/MyTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -51,14 +89,14 @@
                 android:text="时 间 : " />
 
             <TextView
-                android:id="@+id/tv_time"
+                android:id="@+id/tv_date"
                 style="@style/MyTextView"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/tv1"
-                android:clickable="true"
-                android:text="请选择时间" />
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/tv2"
+                android:text="无" />
 
         </RelativeLayout>
 
@@ -68,63 +106,70 @@
             android:layout_marginTop="5dp">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/tv_type1"
                 style="@style/MyTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="类 别 : " />
 
-            <Spinner
-                android:id="@+id/spinner"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tv_type"
+                style="@style/MyTextView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/textView2"
-                android:layout_toEndOf="@+id/textView2" />
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/tv_type1"
+                android:text="无" />
         </RelativeLayout>
-
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginBottom="5dp">
+            android:layout_marginTop="5dp">
 
             <TextView
-                android:id="@+id/textView3"
+                android:id="@+id/tv_address1"
                 style="@style/MyTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="地 点 : " />
 
-            <EditText
-                android:id="@+id/et_address"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tv_address"
+                style="@style/MyTextView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@+id/textView3"
-                android:theme="@style/MyEditText" />
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/tv_address1"
+                android:text="无" />
         </RelativeLayout>
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginTop="5dp">
+
+            <TextView
+                android:id="@+id/tv_payer_payee1"
+                style="@style/MyTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="收 方 : "/>
 
             <TextView
                 android:id="@+id/tv_payer_payee"
                 style="@style/MyTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true" />
-
-            <EditText
-                android:id="@+id/et_payer_payee"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_toEndOf="@+id/tv_payer_payee"
-                android:theme="@style/MyEditText" />
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/tv_payer_payee1"
+                android:text="无" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -133,20 +178,22 @@
             android:layout_marginTop="5dp">
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/tv_remark1"
                 style="@style/MyTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="备 注 : " />
 
-            <EditText
-                android:id="@+id/et_remark"
-                android:layout_width="match_parent"
+            <TextView
+                android:id="@+id/tv_remark"
+                style="@style/MyTextView"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_toEndOf="@+id/textView4"
-                android:theme="@style/MyEditText" />
+                android:layout_centerVertical="true"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@id/tv_remark1"
+                android:text="无" />
         </RelativeLayout>
 
 
@@ -159,27 +206,25 @@
                 android:layout_height="match_parent">
 
                 <Button
-                    android:id="@+id/bt_cancel"
+                    android:id="@+id/bt_modify"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentStart="true"
                     android:background="@drawable/shape_bt_login"
-                    android:text="取 消" />
+                    android:text="修 改" />
 
                 <Button
-                    android:id="@+id/bt_save"
+                    android:id="@+id/bt_delete"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBaseline="@+id/bt_cancel"
-                    android:layout_alignBottom="@+id/bt_cancel"
+                    android:layout_alignBaseline="@+id/bt_modify"
+                    android:layout_alignBottom="@+id/bt_modify"
                     android:layout_alignParentEnd="true"
                     android:background="@drawable/shape_bt_login"
-                    android:text="保 存" />
+                    android:text="删 除" />
             </RelativeLayout>
         </LinearLayout>
 
-
     </LinearLayout>
-
 </LinearLayout>

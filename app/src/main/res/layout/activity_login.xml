@@ -71,9 +71,23 @@
                 android:theme="@style/MyEditText"
                 android:layout_marginStart="35dp"
                 android:textColor="@color/white"
-                android:inputType="textPassword"
-
                 android:textColorHint="@color/gray" />
+            <RelativeLayout
+                android:id="@+id/rl_visible"
+                android:layout_width="38dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_height="38dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true">
+                <ImageView
+                    android:id="@+id/iv_eye"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_centerInParent="true"
+                    />
+            </RelativeLayout>
+
         </RelativeLayout>
 
 

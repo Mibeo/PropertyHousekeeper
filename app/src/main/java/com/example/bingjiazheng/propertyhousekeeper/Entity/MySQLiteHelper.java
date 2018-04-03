@@ -28,7 +28,7 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 //        db.execSQL(sql1);
 //        db.execSQL(sql2);
 //        db.execSQL(sql3);
-        db.execSQL(sql4);
+//        db.execSQL(sql4);
         db.execSQL(sql5);
     }
 

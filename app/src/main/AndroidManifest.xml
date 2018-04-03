@@ -42,6 +42,15 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity android:name=".Activity.NoteActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".Activity.ModifyDeleteActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
 
     </application>
 

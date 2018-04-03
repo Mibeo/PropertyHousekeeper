@@ -40,29 +40,17 @@ public class ListviewAdapter extends BaseAdapter {
     private Context context;
     @Override
     public int getCount() {
-        if(dataisNull){
-            return 0;
-        }else {
-            return data.size();
-        }
+        return dataisNull ? 0:data.size();
     }
 
     @Override
     public Object getItem(int position) {
-        if(dataisNull){
-            return null;
-        }else {
-            return data.get(position);
-        }
+        return dataisNull?null:data.get(position);
     }
 
     @Override
     public long getItemId(int position) {
-        if(dataisNull){
-            return Long.parseLong(null);
-        }else {
-            return data.get(position).getId();
-        }
+        return dataisNull?Long.parseLong(null):data.get(position).getId();
     }
 
     @Override

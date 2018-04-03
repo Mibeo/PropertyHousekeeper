@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void setNavigationViewChecked(int position) {
         mNavigationView.getMenu().getItem(position).setChecked(true);
-        Log.i("Kevin", "the count of menu item is--->" + mNavigationView.getMenu().size() + "");
+//        Log.i("Kevin", "the count of menu item is--->" + mNavigationView.getMenu().size() + "");
         for (int i = 0; i < mNavigationView.getMenu().size(); i++) {
             if (i != position) {
                 mNavigationView.getMenu().getItem(i).setChecked(false);

@@ -124,7 +124,7 @@ public  class SingleInfo implements Parcelable{
             singleInfo.setAddress(source.readString());
             singleInfo.setPayer_payee(source.readString());
             singleInfo.setRemark(source.readString());
-            return null;
+            return singleInfo;
         }
 
         @Override
