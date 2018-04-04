@@ -17,6 +17,7 @@ public  class SingleInfo implements Parcelable{
     private String address;
     private String payer_payee;
     private String remark;
+    private String text;
 
     public SingleInfo(){
 
@@ -94,6 +95,14 @@ public  class SingleInfo implements Parcelable{
         this.remark = remark;
     }
 
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -110,6 +119,7 @@ public  class SingleInfo implements Parcelable{
         dest.writeString(address);
         dest.writeString(payer_payee);
         dest.writeString(remark);
+        dest.writeString(text);
     }
     public static final Creator<SingleInfo> CREATOR = new Creator<SingleInfo>() {
         @Override
@@ -124,6 +134,7 @@ public  class SingleInfo implements Parcelable{
             singleInfo.setAddress(source.readString());
             singleInfo.setPayer_payee(source.readString());
             singleInfo.setRemark(source.readString());
+            singleInfo.setText(source.readString());
             return singleInfo;
         }
 

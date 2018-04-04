@@ -51,6 +51,21 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity
+            android:name=".Activity.ModifyNoteActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".Activity.ModifySpendIncomeActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".Activity.MyIncomeActivity"
+            android:screenOrientation="portrait">
+
+        </activity>
 
     </application>
 

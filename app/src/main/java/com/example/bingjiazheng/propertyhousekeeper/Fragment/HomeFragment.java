@@ -20,6 +20,7 @@ import com.example.bingjiazheng.propertyhousekeeper.Activity.AddNewNoteActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.AddSpendActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.LogInActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.MainActivity;
+import com.example.bingjiazheng.propertyhousekeeper.Activity.MyIncomeActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.MySpendActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.NoteActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Adapter.GridViewAdapter;
@@ -132,6 +133,15 @@ public class HomeFragment extends Fragment {
                         }
                         break;
                     case "我的收入":
+                        if (0 != mSettings.getInt("selected_life", 0)) {
+                            Intent intent = new Intent(getContext(), MyIncomeActivity.class);
+                            intent.putExtra("user", user);
+                            intent.putExtra("life",mSettings.getInt("selected_life",0));
+                            startActivity(intent);
+                        } else {
+                            showText(getActivity(), "请选择人生阶段");
+                            MainActivity.mDrawerLayout.openDrawer(mNavigationView);
+                        }
                         break;
                     case "数据管理":
                         break;

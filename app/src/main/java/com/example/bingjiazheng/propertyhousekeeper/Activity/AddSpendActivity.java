@@ -1,12 +1,12 @@
 package com.example.bingjiazheng.propertyhousekeeper.Activity;
 
-import android.os.IInterface;
 
-import com.example.bingjiazheng.propertyhousekeeper.Adapter.SpinnerAdapter;
 import com.example.bingjiazheng.propertyhousekeeper.Utils.DbManger;
 
-import java.util.ArrayList;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger.getData1;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger.getData2;
 import java.util.List;
+
 
 /**
  * Created by bingjia.zheng on 2018/3/26.
@@ -16,26 +16,6 @@ public class AddSpendActivity extends Spend_IncomeActivity {
 
     protected String sql1 = "create table if not exists spend_db(user varchar(20),life integer,money decimal,date varchar(10),type varchar(10),address varchar(100),payer_payee varchar(50),remark varchar(200))";
     private int life_stage = 1;
-
-    @Override
-    IInterface getData() {
-        switch (life_stage) {
-            case 1:
-                student(data);
-                break;
-            case 2:
-                workunmarried(data);
-                break;
-            case 3:
-                workmarried(data);
-                break;
-            case 4:
-                retire(data);
-                break;
-
-        }
-        return null;
-    }
 
     /*@Override
     IInterface setAdapter() {
@@ -123,8 +103,14 @@ public class AddSpendActivity extends Spend_IncomeActivity {
         datas.add("恋爱开销");
         datas.add("其他");
     }
+
     @Override
-    IInterface init() {
+    protected void getData() {
+       getData1(life_stage,data);
+    }
+
+    @Override
+    protected void init() {
         user = getIntent().getStringExtra("user");
         helper = DbManger.getIntance(this);
         sqLiteDatabase = helper.getWritableDatabase();
@@ -132,6 +118,6 @@ public class AddSpendActivity extends Spend_IncomeActivity {
         tv_payer_payee.setText("收 方 : ");
         tv_Title.setText("新增支出");
         super.table = "spend_db";
-        return null;
     }
+
 }

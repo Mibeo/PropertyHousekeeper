@@ -106,8 +106,40 @@ public class DataServer {
         }else{
             return null;
         }
-
-
+    }
+    public static List<SingleInfo> getData2(Context context, String table, String user) {
+        data = new ArrayList<SingleInfo>();
+        int id = 0;
+        helper = DbManger.getIntance(context);
+        sqLiteDatabase = helper.getWritableDatabase();
+        Cursor cursor = null;
+        cursor = sqLiteDatabase.rawQuery("select count(*)  from sqlite_master where type ='table' and name ='flag_db' ", null);
+        if (cursor.moveToNext()) {
+            int count = cursor.getInt(0);
+            if (count > 0) {
+//                result = true;
+                cursor = sqLiteDatabase.query(table, null, "user like ?", new String[]{user}, null, null, null);
+                if (cursor == null) {
+                    return null;
+                } else {
+                    while (cursor.moveToNext()) {
+                        id++;
+                        SingleInfo singleInfo = new SingleInfo();
+                        singleInfo.setId(id);
+                        singleInfo.setDate(cursor.getString(cursor.getColumnIndex("date")));
+                        singleInfo.setText(cursor.getString(cursor.getColumnIndex("text")));
+                        data.add(singleInfo);
+                    }
+                }
+                cursor.close();
+                sqLiteDatabase.close();
+                return data;
+            }else{
+                return null;
+            }
+        }else{
+            return null;
+        }
     }
 
 }

@@ -8,6 +8,9 @@ import com.example.bingjiazheng.propertyhousekeeper.Utils.DbManger;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger.getData1;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger.getData2;
+
 
 /**
  * Created by bingjia.zheng on 2018/3/26.
@@ -18,27 +21,14 @@ public class AddIncomeActivity extends Spend_IncomeActivity {
     private int life_stage = 1;
 
 
+
     @Override
-    IInterface getData() {
-        switch (life_stage){
-            case 1:
-                student(data);
-                break;
-            case 2:
-                workunmarried(data);
-                break;
-            case 3:
-                workmarried(data);
-                break;
-            case 4:
-                retire(data);
-                break;
-        }
-        return null;
+    protected void getData() {
+        getData2(life_stage,data);
     }
 
     @Override
-    IInterface init() {
+    protected void init() {
         user = getIntent().getStringExtra("user");
         helper = DbManger.getIntance(this);
         sqLiteDatabase = helper.getWritableDatabase();
@@ -46,8 +36,8 @@ public class AddIncomeActivity extends Spend_IncomeActivity {
         tv_payer_payee.setText("付 方 : ");
         tv_Title.setText("新增收入");
         table = "income_db";
-        return null;
     }
+
 
     /*@Override
     IInterface setAdapter() {

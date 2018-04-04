@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.IInterface;
@@ -21,6 +22,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.bingjiazheng.propertyhousekeeper.Entity.MySQLiteHelper;
+import com.example.bingjiazheng.propertyhousekeeper.Entity.SingleInfo;
 import com.example.bingjiazheng.propertyhousekeeper.Fragment.NightModeHelper;
 import com.example.bingjiazheng.propertyhousekeeper.R;
 
@@ -36,7 +38,7 @@ import static com.example.bingjiazheng.propertyhousekeeper.Utils.ToastUtil.showT
 
 public abstract class Spend_IncomeActivity extends AppCompatActivity implements View.OnClickListener {
     protected NightModeHelper mNightModeHelper;
-    protected TextView tv_time, tv_Title, tv_payer_payee;
+    protected TextView tv_date, tv_Title, tv_payer_payee;
     protected EditText et_money, et_address, et_remark, et_payer_payee;
     protected Button bt_cancel, bt_save;
     protected int mYear, mMonth, mDay;
@@ -51,6 +53,14 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
     protected String type;
     private RelativeLayout iv_back;
     protected List<String> data;
+    protected boolean isModify;
+    protected SingleInfo singleInfo;
+    protected double old_money;
+    protected String old_date;
+    protected String old_type;
+    protected String old_address;
+    protected String old_payer_payee;
+    protected String old_remark;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,24 +71,32 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
         initview();
     }
 
-    protected void initview() {
+    private void initview() {
         /*helper = SpendManger.getIntance(this);
         sqLiteDatabase = helper.getWritableDatabase();
         sqLiteDatabase.execSQL(sql1);*/
-        tv_time = (TextView) findViewById(R.id.tv_time);
-        tv_time.setOnClickListener(this);
+        tv_date = (TextView) findViewById(R.id.tv_date);
+        tv_date.setOnClickListener(this);
         tv_Title = findViewById(R.id.tv_Title);
         tv_payer_payee = findViewById(R.id.tv_payer_payee);
         iv_back = findViewById(R.id.iv_back);
         iv_back.setOnClickListener(this);
         init();
+        if(isModify){
+            old_money = singleInfo.getMoney();
+            old_date = singleInfo.getDate();
+            old_type = singleInfo.getType();
+            old_address = singleInfo.getAddress();
+            old_payer_payee = singleInfo.getPayer_payee();
+            old_remark = singleInfo.getRemark();
+        }
         /*tv_payer_payee.setText("收 方 : ");
         tv_Title.setText("新增支出");*/
         et_money = findViewById(R.id.et_money);
         et_address = findViewById(R.id.et_address);
         et_remark = findViewById(R.id.et_remark);
         et_payer_payee = findViewById(R.id.et_payer_payee);
-        ll = (LinearLayout) findViewById(R.id.ll);
+        ll = findViewById(R.id.ll);
         ll.setOnClickListener(this);
         bt_save = findViewById(R.id.bt_save);
         bt_cancel = findViewById(R.id.bt_cancel);
@@ -112,20 +130,12 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
     public List<String> getDataSource() {
         data = new ArrayList<>();
         getData();
-        /*spinnerList.add("北京");
-        spinnerList.add("上海");
-        spinnerList.add("广州");
-        spinnerList.add("北京");
-        spinnerList.add("上海");
-        spinnerList.add("广州");*/
         return data;
     }
 
-    abstract IInterface getData();
+    protected abstract void getData();
 
-    abstract IInterface init();
-
-//    abstract IInterface setAdapter();
+    protected abstract void init();
 
     protected void addSpendItem(String user, int life, double money, String date, String type,
                                 String address, String payer_payee, String remark) {
@@ -144,15 +154,10 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
         showText(this, "保存成功");
     }
 
-    /* protected String sql1 = "create table if not exists spend_db(user varchar(20),life integer,money decimal,time varchar(10),type varchar(10),address varchar(100),payer_payee varchar(50),remark varchar(200))";
-     protected String sql2 = "create table if not exists income_db(id integer primary key autoincrement,user varchar(20),life integer,money decimal,time varchar(10),type varchar(10),address varchar(100),payer_payee varchar(50),remark varchar(200))";
-     protected String sql4 = "create table if not exists flag_db(id integer primary key autoincrement,user varchar(20),flag varchar(200))";
-     protected String sql5 = "create table if not exists budget_db(id integer primary key autoincrement,user varchar(20),life integer,type varchar(10),budget decimal,month varchar(10))";
- */
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_time:
+            case R.id.tv_date:
                 showDialog(DATE_DIALOG);
                 break;
             case R.id.ll:
@@ -170,11 +175,30 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
 
     private void save() {
         if (!et_money.getText().toString().equals("")) {
-            addSpendItem(user, 1, Double.valueOf(et_money.getText().toString()), tv_time.getText().toString(), spinner.getSelectedItem() + "",
-                    et_address.getText().toString(), et_payer_payee.getText().toString(), et_remark.getText().toString());
-        }else{
-            showText(this,"请输入金额数");
+            if(isModify){
+                updateItem(user, 1, Double.valueOf(et_money.getText().toString()), tv_date.getText().toString(), spinner.getSelectedItem() + "",
+                        et_address.getText().toString(), et_payer_payee.getText().toString(), et_remark.getText().toString());
+            }else {
+                addSpendItem(user, 1, Double.valueOf(et_money.getText().toString()), tv_date.getText().toString(), spinner.getSelectedItem() + "",
+                        et_address.getText().toString(), et_payer_payee.getText().toString(), et_remark.getText().toString());
+            }
+        } else {
+            showText(this, "请输入金额数");
         }
+    }
+
+    private void updateItem(String user, int life, double money, String date, String type,
+                            String address, String payer_payee, String remark) {
+//        "delete from flag_db where user='"+user+"' and date='"+singleInfo.getDate()+"' and text='"+singleInfo.getText()+"'"
+        sqLiteDatabase = helper.getWritableDatabase();
+        sqLiteDatabase.execSQL("update '"+table+"'set user='"+user+"',life='"+life+"',money='"+money+"',date='"+date+"',type='"+type+"',address='"+address
+        +"',payer_payee='"+payer_payee+"',remark='"+remark+"' where "+"user='"+user+"' and life='"+life+"' and money='"+old_money+
+                "' and date='"+old_date+"' and type='"+old_type+"' and address='"+old_address+"' and payer_payee='"+old_payer_payee+
+                "' and remark='"+old_remark+"'");
+        showText(this,"修改成功");
+        sqLiteDatabase.close();
+        Intent intent = new Intent();
+        setResult(2,intent);
     }
 
     @Override
@@ -187,7 +211,7 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
     }
 
     public void display() {
-        tv_time.setText(new StringBuffer().append(mYear).append("-").append(mMonth + 1).append("-").append(mDay).append(" "));
+        tv_date.setText(new StringBuffer().append(mYear).append("-").append(mMonth + 1).append("-").append(mDay).append(" "));
     }
 
     protected DatePickerDialog.OnDateSetListener mdateListener = new DatePickerDialog.OnDateSetListener() {

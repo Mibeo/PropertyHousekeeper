@@ -51,7 +51,7 @@
                 android:text="时 间 : " />
 
             <TextView
-                android:id="@+id/tv_time"
+                android:id="@+id/tv_date"
                 style="@style/MyTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
