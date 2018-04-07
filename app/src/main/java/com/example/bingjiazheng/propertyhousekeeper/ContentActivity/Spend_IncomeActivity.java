@@ -1,4 +1,4 @@
-package com.example.bingjiazheng.propertyhousekeeper.Activity;
+package com.example.bingjiazheng.propertyhousekeeper.ContentActivity;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -25,6 +25,7 @@ import com.example.bingjiazheng.propertyhousekeeper.Entity.MySQLiteHelper;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.SingleInfo;
 import com.example.bingjiazheng.propertyhousekeeper.Fragment.NightModeHelper;
 import com.example.bingjiazheng.propertyhousekeeper.R;
+import com.example.bingjiazheng.propertyhousekeeper.Utils.DbManger;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -61,7 +62,8 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
     protected String old_address;
     protected String old_payer_payee;
     protected String old_remark;
-
+    protected int Life_Stage;
+    protected ArrayAdapter<String> spinnerAadapter;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +77,7 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
         /*helper = SpendManger.getIntance(this);
         sqLiteDatabase = helper.getWritableDatabase();
         sqLiteDatabase.execSQL(sql1);*/
+        Life_Stage = getIntent().getIntExtra("Life_Stage",0);
         tv_date = (TextView) findViewById(R.id.tv_date);
         tv_date.setOnClickListener(this);
         tv_Title = findViewById(R.id.tv_Title);
@@ -112,7 +115,7 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
         // 数据源手动添加
 
         getDataSource();
-        ArrayAdapter<String> spinnerAadapter = new ArrayAdapter<String>(this,
+        spinnerAadapter = new ArrayAdapter<String>(this,
                 R.layout.custom_spiner_text_item, getDataSource());
         spinnerAadapter
                 .setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
@@ -176,10 +179,10 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
     private void save() {
         if (!et_money.getText().toString().equals("")) {
             if(isModify){
-                updateItem(user, 1, Double.valueOf(et_money.getText().toString()), tv_date.getText().toString(), spinner.getSelectedItem() + "",
+                updateItem(singleInfo.get_id(),user, Life_Stage, Double.valueOf(et_money.getText().toString()), tv_date.getText().toString(), spinner.getSelectedItem() + "",
                         et_address.getText().toString(), et_payer_payee.getText().toString(), et_remark.getText().toString());
             }else {
-                addSpendItem(user, 1, Double.valueOf(et_money.getText().toString()), tv_date.getText().toString(), spinner.getSelectedItem() + "",
+                addSpendItem(user, Life_Stage, Double.valueOf(et_money.getText().toString()), tv_date.getText().toString(), spinner.getSelectedItem() + "",
                         et_address.getText().toString(), et_payer_payee.getText().toString(), et_remark.getText().toString());
             }
         } else {
@@ -187,17 +190,33 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
         }
     }
 
-    private void updateItem(String user, int life, double money, String date, String type,
+    private void updateItem(int _id,String user, int life, double money, String date, String type,
                             String address, String payer_payee, String remark) {
 //        "delete from flag_db where user='"+user+"' and date='"+singleInfo.getDate()+"' and text='"+singleInfo.getText()+"'"
+        helper = DbManger.getIntance(this);
         sqLiteDatabase = helper.getWritableDatabase();
         sqLiteDatabase.execSQL("update '"+table+"'set user='"+user+"',life='"+life+"',money='"+money+"',date='"+date+"',type='"+type+"',address='"+address
-        +"',payer_payee='"+payer_payee+"',remark='"+remark+"' where "+"user='"+user+"' and life='"+life+"' and money='"+old_money+
+        +"',payer_payee='"+payer_payee+"',remark='"+remark+"' where "+"_id='"+_id+"'");
+        /*sqLiteDatabase.execSQL("update '"+table+"'set user='"+user+"',life='"+life+"',money='"+money+"',date='"+date+"',type='"+type+"',address='"+address
+                +"',payer_payee='"+payer_payee+"',remark='"+remark+"' where "+"_id='"+_id+"' and user='"+user+"' and life='"+life+"' and money='"+old_money+
                 "' and date='"+old_date+"' and type='"+old_type+"' and address='"+old_address+"' and payer_payee='"+old_payer_payee+
-                "' and remark='"+old_remark+"'");
+                "' and remark='"+old_remark+"'");*/
         showText(this,"修改成功");
         sqLiteDatabase.close();
+        SingleInfo singleInfo = new SingleInfo();
+        singleInfo.set_id(_id);
+        singleInfo.setUser(user);
+        singleInfo.setLife(life);
+        singleInfo.setMoney(money);
+        singleInfo.setDate(date);
+        singleInfo.setType(type);
+        singleInfo.setAddress(address);
+        singleInfo.setPayer_payee(payer_payee);
+        singleInfo.setRemark(remark);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("singleInfo",singleInfo);
         Intent intent = new Intent();
+        intent.putExtras(bundle);
         setResult(2,intent);
     }
 

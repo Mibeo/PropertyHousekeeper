@@ -102,7 +102,7 @@ public class HomeFragment extends Fragment {
                     case "新增支出":
                         if (0 != mSettings.getInt("selected_life", 0)) {
                             Intent intent = new Intent(getContext(), AddSpendActivity.class);
-                            intent.putExtra("life",mSettings.getInt("selected_life",0));
+                            intent.putExtra("Life_Stage",mSettings.getInt("selected_life",0));
                             intent.putExtra("user",user);
                             startActivity(intent);
                         } else {
@@ -114,7 +114,7 @@ public class HomeFragment extends Fragment {
                         if (0 != mSettings.getInt("selected_life", 0)) {
                             Intent intent = new Intent(getContext(), AddIncomeActivity.class);
                             intent.putExtra("user", user);
-                            intent.putExtra("life",mSettings.getInt("selected_life",0));
+                            intent.putExtra("Life_Stage",mSettings.getInt("selected_life",0));
                             startActivity(intent);
                         } else {
                             showText(getActivity(), "请选择人生阶段");
@@ -125,7 +125,7 @@ public class HomeFragment extends Fragment {
                         if (0 != mSettings.getInt("selected_life", 0)) {
                             Intent intent = new Intent(getContext(), MySpendActivity.class);
                             intent.putExtra("user", user);
-                            intent.putExtra("life",mSettings.getInt("selected_life",0));
+                            intent.putExtra("Life_Stage",mSettings.getInt("selected_life",0));
                             startActivity(intent);
                         } else {
                             showText(getActivity(), "请选择人生阶段");
@@ -136,7 +136,7 @@ public class HomeFragment extends Fragment {
                         if (0 != mSettings.getInt("selected_life", 0)) {
                             Intent intent = new Intent(getContext(), MyIncomeActivity.class);
                             intent.putExtra("user", user);
-                            intent.putExtra("life",mSettings.getInt("selected_life",0));
+                            intent.putExtra("Life_Stage",mSettings.getInt("selected_life",0));
                             startActivity(intent);
                         } else {
                             showText(getActivity(), "请选择人生阶段");
@@ -151,7 +151,7 @@ public class HomeFragment extends Fragment {
                         if (0 != mSettings.getInt("selected_life", 0)) {
                             Intent intent = new Intent(getContext(), NoteActivity.class);
                             intent.putExtra("user",user);
-                            intent.putExtra("life",mSettings.getInt("selected_life",0));
+                            intent.putExtra("Life_Stage",mSettings.getInt("selected_life",0));
                             startActivity(intent);
                         } else {
                             showText(getActivity(), "请选择人生阶段");

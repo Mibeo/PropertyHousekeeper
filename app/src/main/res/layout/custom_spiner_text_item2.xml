@@ -9,4 +9,5 @@
     android:singleLine="true"
     android:textAlignment="gravity"
     android:textColor="@color/white"
+    android:background="@drawable/spinner_selector"
     android:textSize="20sp" />

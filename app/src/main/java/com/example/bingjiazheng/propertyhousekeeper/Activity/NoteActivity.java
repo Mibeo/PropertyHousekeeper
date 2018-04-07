@@ -1,5 +1,6 @@
 package com.example.bingjiazheng.propertyhousekeeper.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.example.bingjiazheng.propertyhousekeeper.Adapter.ListviewAdapter;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.MySQLiteHelper;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.SingleInfo;
 import com.example.bingjiazheng.propertyhousekeeper.R;
+import com.example.bingjiazheng.propertyhousekeeper.Utils.Constant;
 import com.example.bingjiazheng.propertyhousekeeper.Utils.DbManger;
 
 import java.util.ArrayList;
@@ -33,16 +35,18 @@ import static com.example.bingjiazheng.propertyhousekeeper.Utils.ToastUtil.showT
  */
 
 public class NoteActivity extends AppCompatActivity {
-    private final String sql4 = "create table if not exists flag_db(user varchar(20),date varchar(10),text varchar(400))";
+    private final String sql4 = "create table if not exists flag_db(_id Integer primary key,user varchar(20),life integer,date varchar(10),text varchar(400))";
+//    private final String sql4 = "create table if not exists flag_db(_id integer primary key autoincrement,user varchar(20),life integer,flag varchar(200))";
     private RelativeLayout iv_back;
     private TextView tv_Title;
-    private Spinner spinner;
+    private Spinner spinner_life;
     private ImageView iv_add;
     private String user;
     protected MySQLiteHelper helper;
     protected SQLiteDatabase sqLiteDatabase;
-    private int life;
+    private int Life_Stage;
     private ListView listView;
+    private Context context;
     private ListviewAdapter listviewAdapter;
     public static int REQUEST_CODE = 1;
     private static final int MENU_DELETE = 1;
@@ -61,7 +65,7 @@ public class NoteActivity extends AppCompatActivity {
         sqLiteDatabase = helper.getWritableDatabase();
         sqLiteDatabase.execSQL(sql4);
         user = getIntent().getStringExtra("user");
-        life = getIntent().getIntExtra("life", 0);
+        Life_Stage = getIntent().getIntExtra("Life_Stage", 0);
         iv_back = findViewById(R.id.iv_back);
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,13 +75,14 @@ public class NoteActivity extends AppCompatActivity {
         });
         tv_Title = findViewById(R.id.tv_Title);
         tv_Title.setText("收支便签");
-        spinner = findViewById(R.id.spinner);
+        spinner_life = findViewById(R.id.spinner_life);
         iv_add = findViewById(R.id.iv_add);
         iv_add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(NoteActivity.this, AddNewNoteActivity.class);
                 intent.putExtra("user", user);
+                intent.putExtra("Life_Stage",Life_Stage);
                 startActivityForResult(intent, REQUEST_CODE);
             }
         });
@@ -86,9 +91,43 @@ public class NoteActivity extends AppCompatActivity {
                 R.layout.custom_spiner_text_item2, getDataSource());
         spinnerAadapter
                 .setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
-        spinner.setAdapter(spinnerAadapter);
-        spinner.setSelection(life - 1);
-        listviewAdapter = new ListviewAdapter(this, user, 3);
+        spinner_life.setAdapter(spinnerAadapter);
+        spinner_life.setSelection(Life_Stage - 1);
+        spinner_life.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view,int position, long id) {
+                String data = (String) spinner_life.getItemAtPosition(position);//从spinner中获取被选择的数据
+                switch (data){
+                    case "学生":
+                        listviewAdapter = new ListviewAdapter(getApplicationContext(), user, Constant.Flag_db,Constant.Life_Student);
+                        Life_Stage = Constant.Life_Student;
+                        listView.setAdapter(listviewAdapter);
+                        break;
+                    case "工作未婚":
+                        listviewAdapter = new ListviewAdapter(getApplicationContext(), user, Constant.Flag_db,Constant.Life_Work_Unmarried);
+                        Life_Stage =Constant.Life_Work_Unmarried;
+                                listView.setAdapter(listviewAdapter);
+                        break;
+                    case "工作已婚":
+                        listviewAdapter = new ListviewAdapter(getApplicationContext(), user, Constant.Flag_db,Constant.Life_Work_married);
+                        Life_Stage =Constant.Life_Work_married;
+                                listView.setAdapter(listviewAdapter);
+                        break;
+                    case "退休":
+                        listviewAdapter = new ListviewAdapter(getApplicationContext(), user, Constant.Flag_db,Constant.Life_Retired);
+                        Life_Stage =Constant.Life_Retired;
+                                listView.setAdapter(listviewAdapter);
+                        break;
+                }
+//                showText(getApplicationContext(),"Spinner1: position="+ position+" id="+ data);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // TODO Auto-generated method stub
+            }
+        });
+        listviewAdapter = new ListviewAdapter(this, user, Constant.Flag_db,Life_Stage);
         listView.setAdapter(listviewAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -136,7 +175,7 @@ public class NoteActivity extends AppCompatActivity {
         sqLiteDatabase = helper.getWritableDatabase();
         sqLiteDatabase.delete("flag_db","user=?",new String[]{user});
         sqLiteDatabase.close();
-        listviewAdapter = new ListviewAdapter(this, user, 3);
+        listviewAdapter = new ListviewAdapter(this, user, Constant.Flag_db,Life_Stage);
         listView.setAdapter(listviewAdapter);
     }
 
@@ -147,6 +186,7 @@ public class NoteActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putParcelable("singleInfo",singleInfo);
         intent.putExtras(bundle);
+        intent.putExtra("Life_Stage",Life_Stage);
         intent.putExtra("user", user);
         startActivityForResult(intent,REQUEST_CODE);
     }
@@ -157,7 +197,7 @@ public class NoteActivity extends AppCompatActivity {
         SingleInfo singleInfo = (SingleInfo)listView.getItemAtPosition(position);
         sqLiteDatabase.execSQL("delete from flag_db where user='"+user+"' and date='"+singleInfo.getDate()+"' and text='"+singleInfo.getText()+"'");
         sqLiteDatabase.close();
-        listviewAdapter = new ListviewAdapter(this, user, 3);
+        listviewAdapter = new ListviewAdapter(this, user, Constant.Flag_db,Life_Stage);
         listView.setAdapter(listviewAdapter);
     }
 
@@ -174,9 +214,9 @@ public class NoteActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_CODE && resultCode == 2) {
-            listviewAdapter = new ListviewAdapter(this, user, 3);
+            listviewAdapter = new ListviewAdapter(this, user, Constant.Flag_db,Life_Stage);
             listView.setAdapter(listviewAdapter);
-            showText(this,"hello");
+//            showText(this,"hello");
         }
     }
 }

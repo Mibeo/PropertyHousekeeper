@@ -8,6 +8,7 @@ import android.os.Parcelable;
  */
 
 public  class SingleInfo implements Parcelable{
+    private int _id;
     private int id;
     private String user;
     private int life;
@@ -21,6 +22,14 @@ public  class SingleInfo implements Parcelable{
 
     public SingleInfo(){
 
+    }
+
+    public int get_id() {
+        return _id;
+    }
+
+    public void set_id(int _id) {
+        this._id = _id;
     }
 
     public int getId() {
@@ -110,6 +119,7 @@ public  class SingleInfo implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(_id);
         dest.writeInt(id);
         dest.writeString(user);
         dest.writeInt(life);
@@ -125,6 +135,7 @@ public  class SingleInfo implements Parcelable{
         @Override
         public SingleInfo createFromParcel(Parcel source) {
             SingleInfo singleInfo = new SingleInfo();
+            singleInfo.set_id(source.readInt());
             singleInfo.setId(source.readInt());
             singleInfo.setUser(source.readString());
             singleInfo.setLife(source.readInt());

@@ -1,10 +1,10 @@
 package com.example.bingjiazheng.propertyhousekeeper.Activity;
 
 import android.os.Bundle;
-import android.os.IInterface;
 import android.support.annotation.Nullable;
 
-import com.example.bingjiazheng.propertyhousekeeper.Utils.DbManger;
+import com.example.bingjiazheng.propertyhousekeeper.ContentActivity.Spend_IncomeActivity;
+import com.example.bingjiazheng.propertyhousekeeper.Utils.Constant;
 
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger.getData1;
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger.getData2;
@@ -14,34 +14,34 @@ import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger.getD
  */
 
 public class ModifySpendIncomeActivity extends Spend_IncomeActivity {
-    private int i;
-    private int life_stage = 1;
-    protected String sql2 = "create table if not exists income_db(user varchar(20),life integer,money decimal,date varchar(10),type varchar(10),address varchar(100),payer_payee varchar(50),remark varchar(200))";
+    private int Table;
+    protected String sql2 = "create table if not exists income_db(_id Integer primary key，user varchar(20),life integer,money decimal,date varchar(10),type varchar(10),address varchar(100),payer_payee varchar(50),remark varchar(200))";
 
 
     @Override
     protected void getData() {
-        if(i==1){
-            getData1(life_stage,data);
-        }else if(i==2){
-            getData2(life_stage,data);
+        if(Table== Constant.Spend_db){
+            getData1(Life_Stage,data);
+        }else if(Table==Constant.Income_db){
+            getData2(Life_Stage,data);
         }
     }
 
     @Override
     protected void init() {
         user = getIntent().getStringExtra("user");
-        i = getIntent().getIntExtra("i", 0);
+        Table = getIntent().getIntExtra("Table", 0);
         singleInfo = getIntent().getParcelableExtra("singleInfo");
-        helper = DbManger.getIntance(this);
-        sqLiteDatabase = helper.getWritableDatabase();
-        sqLiteDatabase.execSQL(sql2);
+//        helper = DbManger.getIntance(this);
+//        sqLiteDatabase = helper.getWritableDatabase();
+////        sqLiteDatabase.execSQL(sql2);
+//        sqLiteDatabase.close();
         isModify = true;
-        if (this.i == 1) {
+        if (this.Table == Constant.Spend_db) {
             tv_payer_payee.setText("收 方 : ");
             tv_Title.setText("支出修改");
             table = "spend_db";
-        } else if (this.i == 2) {
+        } else if (this.Table == Constant.Income_db) {
             tv_payer_payee.setText("付 方 : ");
             tv_Title.setText("收入修改");
             table = "income_db";
@@ -58,10 +58,13 @@ public class ModifySpendIncomeActivity extends Spend_IncomeActivity {
 
         et_money.setText(String.valueOf(singleInfo.getMoney()));
         tv_date.setText(singleInfo.getDate());
-//        spinner.set
-//        spinner.setSelection();
-        spinner.setSelection(0);
-//        spinner.setSelection(Integer.parseInt(singleInfo.getType()));
+        int k= spinnerAadapter.getCount();
+        for(int i=0;i<k;i++){
+            if(singleInfo.getType().equals(spinnerAadapter.getItem(i).toString())){
+                spinner.setSelection(i,true);// 默认选中项
+                break;
+            }
+        }
         et_address.setText(singleInfo.getAddress());
         et_payer_payee.setText(singleInfo.getPayer_payee());
         et_remark.setText(singleInfo.getRemark());

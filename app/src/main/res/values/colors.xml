@@ -16,4 +16,5 @@
     <color name="amber">#BBFFC107</color>
     <color name="light_gray_press">#d9d9d9</color>
     <color name="light_gray">#efebeb</color>
+    <color name="lucency">#00000000</color>
 </resources>

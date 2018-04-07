@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.SingleInfo;
 import com.example.bingjiazheng.propertyhousekeeper.R;
+import com.example.bingjiazheng.propertyhousekeeper.Utils.Constant;
 
 import org.w3c.dom.Text;
 
@@ -22,17 +23,19 @@ import java.util.List;
 
 public class ListviewAdapter extends BaseAdapter {
     private boolean dataisNull;
-    private int i;
+    private int Table;
+    private int Life_Stage;
 
-    public ListviewAdapter(Context context, String user, int i) {
+    public ListviewAdapter(Context context, String user, int Table,int Life_Stage) {
         this.context = context;
-        this.i = i;
-        if (i == 1) {
-            data = DataServer.getData(context, "spend_db", user);
-        } else if (i == 2) {
-            data = DataServer.getData(context, "income_db", user);
-        } else if (i == 3) {
-            data = DataServer.getData2(context, "flag_db", user);
+        this.Table = Table;
+        this.Life_Stage = Life_Stage;
+        if (Table == Constant.Spend_db) {
+            data = DataServer.getData(context, "spend_db", user,Life_Stage);
+        } else if (Table == Constant.Income_db) {
+            data = DataServer.getData(context, "income_db", user,Life_Stage);
+        } else if (Table == Constant.Flag_db) {
+            data = DataServer.getData2(context, "flag_db", user,Life_Stage);
         }
         if (data == null) {
             dataisNull = true;
@@ -63,10 +66,10 @@ public class ListviewAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.listview_item, null);
             viewHolder = new ViewHolder();
-            if (i == 1 || i == 2) {
+            if (Table == Constant.Spend_db || Table == Constant.Income_db) {
                 viewHolder.tv_type = convertView.findViewById(R.id.tv_type);
                 viewHolder.tv_money = convertView.findViewById(R.id.tv_money);
-            } else if (i == 3) {
+            } else if (Table == Constant.Flag_db) {
                 viewHolder.tv_text = convertView.findViewById(R.id.tv_type);
             }
             viewHolder.tv_number = convertView.findViewById(R.id.tv_number);
@@ -76,12 +79,13 @@ public class ListviewAdapter extends BaseAdapter {
             viewHolder = (ViewHolder) convertView.getTag();
         }
         if (data != null) {
-            if (i == 1 || i==2) {
+            if (Table == Constant.Spend_db || Table == Constant.Income_db) {
                 viewHolder.tv_type.setText(data.get(position).getType());
                 viewHolder.tv_money.setText(String.valueOf(data.get(position).getMoney()));
-            } else if (i == 3) {
+            } else if (Table == Constant.Flag_db) {
                 viewHolder.tv_text.setText(data.get(position).getText());
             }
+//            viewHolder.tv_number.setText(String.valueOf(data.get(position).getId()));
             viewHolder.tv_number.setText(String.valueOf(data.get(position).getId()));
             viewHolder.tv_date.setText(data.get(position).getDate());
             return convertView;

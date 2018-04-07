@@ -67,7 +67,7 @@ public class DataServer {
         return result;
     }*/
 
-    public static List<SingleInfo> getData(Context context, String table, String user) {
+    public static List<SingleInfo> getData(Context context, String table, String user,int Life_Stage) {
         data = new ArrayList<SingleInfo>();
         int id = 0;
         helper = DbManger.getIntance(context);
@@ -78,7 +78,7 @@ public class DataServer {
             int count = cursor.getInt(0);
             if (count > 0) {
 //                result = true;
-                cursor = sqLiteDatabase.query(table, null, "user like ?", new String[]{user}, null, null, null);
+                cursor = sqLiteDatabase.query(table, null, "user like ? and life like ?", new String[]{user,Life_Stage+""}, null, null, null);
                 if (cursor == null) {
                     return null;
                 } else {
@@ -86,6 +86,7 @@ public class DataServer {
                         id++;
                         SingleInfo singleInfo = new SingleInfo();
                         singleInfo.setId(id);
+                        singleInfo.set_id(cursor.getInt(cursor.getColumnIndex("_id")));
                         singleInfo.setLife(cursor.getInt(cursor.getColumnIndex("life")));
                         singleInfo.setMoney(cursor.getDouble(cursor.getColumnIndex("money")));
                         singleInfo.setDate(cursor.getString(cursor.getColumnIndex("date")));
@@ -94,7 +95,7 @@ public class DataServer {
                         singleInfo.setPayer_payee(cursor.getString(cursor.getColumnIndex("payer_payee")));
                         singleInfo.setRemark(cursor.getString(cursor.getColumnIndex("remark")));
                         data.add(singleInfo);
-                        Log.e("data", data.get(0).getAddress() + "");
+//                        Log.e("data", data.get(0).getAddress() + "");
                     }
                 }
                 cursor.close();
@@ -107,7 +108,7 @@ public class DataServer {
             return null;
         }
     }
-    public static List<SingleInfo> getData2(Context context, String table, String user) {
+    public static List<SingleInfo> getData2(Context context, String table, String user,int Life_Stage) {
         data = new ArrayList<SingleInfo>();
         int id = 0;
         helper = DbManger.getIntance(context);
@@ -118,7 +119,7 @@ public class DataServer {
             int count = cursor.getInt(0);
             if (count > 0) {
 //                result = true;
-                cursor = sqLiteDatabase.query(table, null, "user like ?", new String[]{user}, null, null, null);
+                cursor = sqLiteDatabase.query(table, null, "user like ? and life like ?", new String[]{user,Life_Stage+""}, null, null, null);
                 if (cursor == null) {
                     return null;
                 } else {
@@ -126,6 +127,7 @@ public class DataServer {
                         id++;
                         SingleInfo singleInfo = new SingleInfo();
                         singleInfo.setId(id);
+                        singleInfo.set_id(cursor.getInt(cursor.getColumnIndex("_id")));
                         singleInfo.setDate(cursor.getString(cursor.getColumnIndex("date")));
                         singleInfo.setText(cursor.getString(cursor.getColumnIndex("text")));
                         data.add(singleInfo);

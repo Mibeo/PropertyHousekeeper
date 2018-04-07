@@ -1,41 +1,24 @@
 package com.example.bingjiazheng.propertyhousekeeper.Activity;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
-import android.widget.TextView;
-
-import com.example.bingjiazheng.propertyhousekeeper.Adapter.ListviewAdapter;
-import com.example.bingjiazheng.propertyhousekeeper.Entity.SingleInfo;
-import com.example.bingjiazheng.propertyhousekeeper.R;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.example.bingjiazheng.propertyhousekeeper.ContentActivity.SpendIncomeContentActivity;
+import com.example.bingjiazheng.propertyhousekeeper.Utils.Constant;
+import com.example.bingjiazheng.propertyhousekeeper.Utils.DbManger;
 
 /**
  * Created by bingjia.zheng on 2018/3/28.
  */
 
 public class MySpendActivity extends SpendIncomeContentActivity {
+    private String sql1 = "create table if not exists spend_db(_id Integer primary key,user varchar(20),life integer,money decimal,date varchar(10),type varchar(10),address varchar(100),payer_payee varchar(50),remark varchar(200))";
 
     @Override
     protected void init() {
         tv_Title.setText("我的支出");
-        i=1;
+        helper = DbManger.getIntance(this);
+        sqLiteDatabase = helper.getWritableDatabase();
+        sqLiteDatabase.execSQL(sql1);
+        sqLiteDatabase.close();
+        Table = Constant.Spend_db;
+        table = "spend_db";
     }
 }

@@ -10,8 +10,8 @@ import java.util.List;
 
 public class DataManger {
     public static List<String> data;
-    public static void getData1(int life_stage,List<String> data) {
-        switch (life_stage){
+    public static void getData1(int Life_Stage,List<String> data) {
+        switch (Life_Stage){
             case 1:
                 student1(data);
                 break;
@@ -116,8 +116,8 @@ public class DataManger {
         datas.add("其他");
     }
 
-    public static void getData2(int life_stage,List<String> datas) {
-        switch (life_stage) {
+    public static void getData2(int Life_Stage,List<String> datas) {
+        switch (Life_Stage) {
             case 1:
                 student2(datas);
                 break;

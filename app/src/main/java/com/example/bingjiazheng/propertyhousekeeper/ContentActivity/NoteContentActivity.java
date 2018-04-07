@@ -1,4 +1,4 @@
-package com.example.bingjiazheng.propertyhousekeeper.Activity;
+package com.example.bingjiazheng.propertyhousekeeper.ContentActivity;
 
 import android.content.ContentValues;
 import android.content.Intent;
@@ -39,7 +39,9 @@ public abstract class NoteContentActivity extends AppCompatActivity {
     protected boolean isModify;
     protected String old_text;
     protected String old_date;
+    protected int old__id;
     private SingleInfo singleInfo;
+    protected int Life_Stage;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -50,6 +52,7 @@ public abstract class NoteContentActivity extends AppCompatActivity {
 
     private void initview() {
         user = getIntent().getStringExtra("user");
+        Life_Stage = getIntent().getIntExtra("Life_Stage",0);
         iv_back = findViewById(R.id.iv_back);
         iv_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,6 +66,7 @@ public abstract class NoteContentActivity extends AppCompatActivity {
         et_text = findViewById(R.id.et_text);
         if(isModify){
             singleInfo = getIntent().getParcelableExtra("singleInfo");
+            old__id = singleInfo.get_id();
             old_text = singleInfo.getText();
             old_date = singleInfo.getDate();
             et_text.setText(singleInfo.getText());
@@ -85,8 +89,10 @@ public abstract class NoteContentActivity extends AppCompatActivity {
         String text = et_text.getText().toString();
         helper = DbManger.getIntance(this);
         sqLiteDatabase = helper.getWritableDatabase();
-        sqLiteDatabase.execSQL("update flag_db set user='"+user+"',date='"+date+"',text='"+text+
-                "' where user='"+user+"' and date='"+old_date+"' and text='"+old_text+"'");
+        sqLiteDatabase.execSQL("update flag_db set _id='"+old__id+"',user='"+user+"',life='"+Life_Stage+"',date='"+date+"',text='"+text+
+                "' where _id='"+old__id+"'");
+        /*sqLiteDatabase.execSQL("update flag_db set user='"+user+"',life='"+Life_Stage+"',date='"+date+"',text='"+text+
+                "' where user='"+user+"' and date='"+old_date+"' and text='"+old_text+"'");*/
         /*sqLiteDatabase.execSQL("update '"+table+"'set user='"+user+"',life='"+life+"',date='"+date+"',type='"+type+"',address='"+address
                 +"',payer_payee='"+payer_payee+"',remark='"+remark+"' where "+"user='"+user+"' and life='"+life+"' and money='"+old_money+
                 "' and date='"+old_date+"' and type='"+old_type+"' and address='"+old_address+"' and payer_payee='"+old_payer_payee+
@@ -108,6 +114,7 @@ public abstract class NoteContentActivity extends AppCompatActivity {
             String date = getDate();
             ContentValues contentValues = new ContentValues();
             contentValues.put("user", user);
+            contentValues.put("life",Life_Stage);
             contentValues.put("date", date);
             contentValues.put("text", text);
             sqLiteDatabase.insert("flag_db", null, contentValues);
