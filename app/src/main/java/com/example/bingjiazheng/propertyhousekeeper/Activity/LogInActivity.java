@@ -39,12 +39,12 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     private SharedPreferences mSettings;
     private SharedPreferences.Editor editor;
     private EditText et_user, et_password;
-    private CheckBox checkBox;
-    private RelativeLayout rl,rl_visible;
+    private CheckBox checkBox, checkBox_self_login;
+    private RelativeLayout rl, rl_visible;
     private MySQLiteHelper helper;
     private SQLiteDatabase sqLiteDatabase;
     private String sql = "create table if not exists password_db(user varchar(20),new_password varchar(20),old_password varchar(20))";
-    private boolean isHide;
+    private boolean isHide, is_Self_Login;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,6 +56,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initView() {
+        is_Self_Login = getIntent().getBooleanExtra("is_Self_Login", false);
         helper = DbManger.getIntance(this);
         sqLiteDatabase = helper.getWritableDatabase();
         sqLiteDatabase.execSQL(sql);
@@ -72,15 +73,28 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         iv_eye = findViewById(R.id.iv_eye);
         mSettings = PreferenceManager.getDefaultSharedPreferences(this);
         editor = mSettings.edit();
-        if(mSettings.getBoolean("visible",false)){
+        if (mSettings.getBoolean("visible", false)) {
             iv_eye.setImageResource(R.mipmap.visible);
             et_password.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-        }else{
+        } else {
             iv_eye.setImageResource(R.mipmap.invisible);
             et_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
         et_user = (EditText) findViewById(R.id.et_user);
-
+        checkBox_self_login = findViewById(R.id.checkBox_self_login);
+        checkBox_self_login.setChecked(mSettings.getBoolean("self_login", false));
+        checkBox_self_login.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (checkBox_self_login.isChecked()) {
+                    editor.putBoolean("self_login", true);
+                    editor.commit();
+                } else {
+                    editor.putBoolean("self_login", false);
+                    editor.commit();
+                }
+            }
+        });
         checkBox = (CheckBox) findViewById(R.id.checkbox);
         checkBox.setChecked(mSettings.getBoolean("RememberPassword", false));
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -96,12 +110,15 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         });
         if (!"".equals(mSettings.getString("TheLastUser", ""))) {
             et_user.setText(mSettings.getString("TheLastUser", ""));
-            if (checkBox.isChecked()) {
-                et_password.setText(getUserOldPassword(et_user.getText().toString()));
+            if (checkBox.isChecked() && !"".equals(mSettings.getString("TheLastUserPassword", ""))) {
+                et_password.setText(mSettings.getString("TheLastUserPassword",""));
             }
         }
         rl_visible = findViewById(R.id.rl_visible);
         rl_visible.setOnClickListener(this);
+        if (!is_Self_Login && checkBox_self_login.isChecked()) {
+            bt_login.performClick();
+        }
     }
 
     private boolean userIsexists(String s) {
@@ -129,6 +146,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         sqLiteDatabase.close();
         return string;
     }
+
     private String getUserNewPassword(String s) {
         sqLiteDatabase = helper.getWritableDatabase();
         Cursor cursor = sqLiteDatabase.query("password_db", new String[]{"user,new_password"}, "user like ?", new String[]{"" + s}, null, null, null);
@@ -151,13 +169,15 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         sqLiteDatabase.close();
         showText(this, "注册成功");
     }
-    private void updateUserOldPassword(String user,String password) {
+
+    private void updateUserOldPassword(String user, String password) {
         sqLiteDatabase = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("old_password", password);
-        sqLiteDatabase.update("password_db", contentValues,"user="+user,null);
+        sqLiteDatabase.update("password_db", contentValues, "user=" + user, null);
         sqLiteDatabase.close();
     }
+
     /*private void updatePassword(String password){
         sqLiteDatabase = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -184,12 +204,12 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void hidePassword() {
-        if(mSettings.getBoolean("visible",false)){
-            editor.putBoolean("visible",false);
+        if (mSettings.getBoolean("visible", false)) {
+            editor.putBoolean("visible", false);
             iv_eye.setImageResource(R.mipmap.invisible);
             et_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        }else {
-            editor.putBoolean("visible",true);
+        } else {
+            editor.putBoolean("visible", true);
             iv_eye.setImageResource(R.mipmap.visible);
             et_password.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
         }
@@ -202,7 +222,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
         if (!"".equals(user) && !"".equals(password)) {
             if (userIsexists(user)) {
                 if (password.equals(getUserNewPassword(user))) {
-                    updateUserOldPassword(user,password);
+                    updateUserOldPassword(user, password);
                     Intent intent = new Intent(this, MainActivity.class);
                     intent.putExtra("user", user);
                     startActivity(intent);
@@ -249,6 +269,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     @Override
     protected void onDestroy() {
         editor.putString("TheLastUser", et_user.getText().toString());
+        editor.putString("TheLastUserPassword", et_password.getText().toString());
         editor.commit();
         super.onDestroy();
     }

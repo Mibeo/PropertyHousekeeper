@@ -94,12 +94,16 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
+            <CheckBox
+                android:id="@+id/checkBox_self_login"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="自动登录" />
             <CheckBox
                 android:id="@+id/checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
                 android:text="记住密码" />
         </RelativeLayout>
 

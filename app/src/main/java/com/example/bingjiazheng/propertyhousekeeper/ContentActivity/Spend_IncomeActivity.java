@@ -25,11 +25,15 @@ import com.example.bingjiazheng.propertyhousekeeper.Entity.MySQLiteHelper;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.SingleInfo;
 import com.example.bingjiazheng.propertyhousekeeper.Fragment.NightModeHelper;
 import com.example.bingjiazheng.propertyhousekeeper.R;
+import com.example.bingjiazheng.propertyhousekeeper.Ui.CustomDatePicker;
 import com.example.bingjiazheng.propertyhousekeeper.Utils.DbManger;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.ToastUtil.showText;
 
@@ -64,6 +68,9 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
     protected String old_remark;
     protected int Life_Stage;
     protected ArrayAdapter<String> spinnerAadapter;
+    private CustomDatePicker datePicker;
+    private String time;
+    private String date;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,6 +135,26 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
         SpinnerAdapter adapter = new SpinnerAdapter(this);
         spinner.setAdapter(adapter);
         adapter.setDatas(datas);*/
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.CHINA);
+        time = sdf.format(new Date());
+        date = time.split(" ")[0];
+        //设置当前显示的日期
+//        currentDate.setText(date);
+        tv_date.setText(date);
+        /**
+         * 设置年月日
+         */
+        datePicker = new CustomDatePicker(this, "请选择日期", new CustomDatePicker.ResultHandler() {
+            @Override
+            public void handle(String time) {
+                tv_date.setText(time.split(" ")[0]);
+//                tv_date.setText(time.split("-")[0]+"-"+time.split("-")[1]);
+            }
+        }, "2007-01-01 00:00", "2030-12-31 00:00");
+        datePicker.showSpecificTime(true); //显示时和分
+        datePicker.setIsLoop(false);
+        datePicker.setDayIsLoop(true);
+        datePicker.setMonIsLoop(true);
     }
 
     public List<String> getDataSource() {
@@ -161,7 +188,8 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_date:
-                showDialog(DATE_DIALOG);
+//                showDialog(DATE_DIALOG);
+                datePicker.show(date);
                 break;
             case R.id.ll:
                 hideSoftInput();

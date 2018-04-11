@@ -122,6 +122,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
             case R.id.rl_exit:
                 Intent intent = new Intent(getContext(), LogInActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("is_Self_Login",true);
                 startActivity(intent);
                 break;
         }

@@ -56,8 +56,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
+                android:padding="5dp"
                 android:layout_toEndOf="@+id/tv1"
-                android:clickable="true"
+                android:textColor="@color/selector_life_text"
+                android:background="@drawable/life_text_selector"
                 android:text="请选择时间" />
 
         </RelativeLayout>
@@ -79,6 +81,9 @@
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="5dp"
+                android:textColor="@color/selector_life_text"
+                android:background="@drawable/life_text_selector"
                 android:layout_alignTop="@+id/textView2"
                 android:layout_toEndOf="@+id/textView2" />
         </RelativeLayout>

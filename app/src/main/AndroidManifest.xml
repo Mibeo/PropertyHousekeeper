@@ -66,6 +66,18 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity
+            android:name=".Activity.DataAnalysisActivity"
+            android:label="数据分析"
+            android:screenOrientation="portrait">
+
+        </activity>
+        <activity
+            android:name=".Activity.PieChartActivity"
+            android:label="数据分析"
+            android:screenOrientation="portrait">
+
+        </activity>
 
     </application>
 

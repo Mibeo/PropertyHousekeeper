@@ -16,9 +16,8 @@ import android.widget.GridView;
 import android.widget.TextView;
 
 import com.example.bingjiazheng.propertyhousekeeper.Activity.AddIncomeActivity;
-import com.example.bingjiazheng.propertyhousekeeper.Activity.AddNewNoteActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.AddSpendActivity;
-import com.example.bingjiazheng.propertyhousekeeper.Activity.LogInActivity;
+import com.example.bingjiazheng.propertyhousekeeper.Activity.DataAnalysisActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.MainActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.MyIncomeActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Activity.MySpendActivity;
@@ -53,8 +52,8 @@ public class HomeFragment extends Fragment {
     }
 
     private int[] imagesID = new int[]{R.mipmap.head, R.mipmap.head, R.mipmap.head,
-            R.mipmap.head, R.mipmap.head, R.mipmap.head, R.mipmap.head};
-    private String[] grid_list = {"新增支出", "新增收入", "我的支出", "我的收入", "数据管理", "数据分析", "收支便签"};
+            R.mipmap.head,  R.mipmap.head, R.mipmap.head};
+    private String[] grid_list = {"新增支出", "新增收入", "我的支出", "我的收入","数据分析", "收支便签"};
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -143,9 +142,16 @@ public class HomeFragment extends Fragment {
                             MainActivity.mDrawerLayout.openDrawer(mNavigationView);
                         }
                         break;
-                    case "数据管理":
-                        break;
                     case "数据分析":
+                        if (0 != mSettings.getInt("selected_life", 0)) {
+                            Intent intent = new Intent(getContext(), DataAnalysisActivity.class);
+                            intent.putExtra("user",user);
+                            intent.putExtra("Life_Stage",mSettings.getInt("selected_life",0));
+                            startActivity(intent);
+                        } else {
+                            showText(getActivity(), "请选择人生阶段");
+                            MainActivity.mDrawerLayout.openDrawer(mNavigationView);
+                        }
                         break;
                     case "收支便签":
                         if (0 != mSettings.getInt("selected_life", 0)) {
