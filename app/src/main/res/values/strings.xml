@@ -17,4 +17,6 @@
     <string name="navigation_text_tab">TextView + LinearLayout</string>
     <string name="navigation_tab_host">TabHost</string>
 
+    <drawable name="light_gray">#d9d9d9</drawable>
+    <drawable name="green">#090</drawable>
 </resources>

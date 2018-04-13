@@ -73,11 +73,12 @@ public class DataServer {
         helper = DbManger.getIntance(context);
         sqLiteDatabase = helper.getWritableDatabase();
         Cursor cursor = null;
-        cursor = sqLiteDatabase.rawQuery("select count(*)  from sqlite_master where type ='table' and name ='spend_db' ", null);
-        if (cursor.moveToNext()) {
-            int count = cursor.getInt(0);
-            if (count > 0) {
-//                result = true;
+//        cursor = sqLiteDatabase.rawQuery("select count(*)  from sqlite_master where type ='table' and name ='spend_db' ", null);
+//        cursor = sqLiteDatabase.rawQuery("select count(*)  from sqlite_master where type ='table' and name ='spend_db' ", null);
+//        if (cursor.moveToNext()) {
+//            int count = cursor.getInt(0);
+//            if (count > 0) {
+////                result = true;
                 cursor = sqLiteDatabase.query(table, null, "user like ? and life like ?", new String[]{user,Life_Stage+""}, null, null, null);
                 if (cursor == null) {
                     return null;
@@ -101,12 +102,12 @@ public class DataServer {
                 cursor.close();
                 sqLiteDatabase.close();
                 return data;
-            }else{
-                return null;
-            }
-        }else{
-            return null;
-        }
+//            }else{
+//                return null;
+//            }
+//        }else{
+//            return null;
+//        }
     }
     public static List<SingleInfo> getData2(Context context, String table, String user,int Life_Stage) {
         data = new ArrayList<SingleInfo>();
@@ -114,10 +115,10 @@ public class DataServer {
         helper = DbManger.getIntance(context);
         sqLiteDatabase = helper.getWritableDatabase();
         Cursor cursor = null;
-        cursor = sqLiteDatabase.rawQuery("select count(*)  from sqlite_master where type ='table' and name ='flag_db' ", null);
-        if (cursor.moveToNext()) {
-            int count = cursor.getInt(0);
-            if (count > 0) {
+//        cursor = sqLiteDatabase.rawQuery("select count(*)  from sqlite_master where type ='table' and name ='flag_db' ", null);
+//        if (cursor.moveToNext()) {
+//            int count = cursor.getInt(0);
+//            if (count > 0) {
 //                result = true;
                 cursor = sqLiteDatabase.query(table, null, "user like ? and life like ?", new String[]{user,Life_Stage+""}, null, null, null);
                 if (cursor == null) {
@@ -136,12 +137,55 @@ public class DataServer {
                 cursor.close();
                 sqLiteDatabase.close();
                 return data;
-            }else{
-                return null;
-            }
-        }else{
-            return null;
-        }
+//            }else{
+//                return null;
+//            }
+//        }else{
+//            return null;
+//        }
+    }
+    public static List<SingleInfo> getData3(Context context, String table, String user,int Life_Stage,String date) {
+        data = new ArrayList<SingleInfo>();
+        int id = 0;
+        helper = DbManger.getIntance(context);
+        sqLiteDatabase = helper.getWritableDatabase();
+        Cursor cursor = null;
+//        cursor = sqLiteDatabase.rawQuery("select count(*)  from sqlite_master where type ='table' and name ='flag_db' ", null);
+//        if (cursor.moveToNext()) {
+//            int count = cursor.getInt(0);
+//            if (count > 0) {
+////                result = true;
+                cursor = sqLiteDatabase.query(table, null, "user like ? and life like ? and date like ? ", new String[]{user,Life_Stage+"","%"+date+"%"}, null, null, null);
+                if (cursor == null) {
+                    return null;
+                } else {
+                    while (cursor.moveToNext()) {
+                        id++;
+                        SingleInfo singleInfo = new SingleInfo();
+//                        singleInfo.setId(id);
+//                        singleInfo.set_id(cursor.getInt(cursor.getColumnIndex("_id")));
+                        singleInfo.setType(cursor.getString(cursor.getColumnIndex("type")));
+                        singleInfo.setMoney(cursor.getDouble(cursor.getColumnIndex("money")));
+                        data.add(singleInfo);
+                    }
+                }
+                cursor.close();
+                sqLiteDatabase.close();
+                return data;
+//            }else{
+//                return null;
+//            }
+//        }else{
+//            return null;
+//        }
+    }
+    public static List<String> getDataSource() {
+        List<String> spinnerList = new ArrayList<String>();
+        spinnerList.add("学生");
+        spinnerList.add("工作未婚");
+        spinnerList.add("工作已婚");
+        spinnerList.add("退休");
+        return spinnerList;
     }
 
 }

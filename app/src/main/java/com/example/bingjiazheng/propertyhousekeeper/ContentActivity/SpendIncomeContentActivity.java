@@ -32,6 +32,7 @@ import com.example.bingjiazheng.propertyhousekeeper.Utils.DbManger;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.getDataSource;
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.ToastUtil.showText;
 
 /**
@@ -73,14 +74,7 @@ public abstract class SpendIncomeContentActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    public List<String> getDataSource() {
-        List<String> spinnerList = new ArrayList<String>();
-        spinnerList.add("学生");
-        spinnerList.add("工作未婚");
-        spinnerList.add("工作已婚");
-        spinnerList.add("退休");
-        return spinnerList;
-    }
+
 
     protected abstract void init();
 

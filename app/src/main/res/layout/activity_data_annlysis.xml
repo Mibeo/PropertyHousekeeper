@@ -1,52 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    >
-    <include layout="@layout/layout_content_toolbar"/>
+    android:orientation="vertical">
+
+    <include layout="@layout/layout_content_toolbar2" />
+
     <RelativeLayout
         android:id="@+id/rl_month"
-        android:clickable="true"
-        android:focusable="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
         android:padding="10dp">
+
         <TextView
             android:id="@+id/tv_month"
-            android:padding="5dp"
+            style="@style/MyTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/selector_life_text"
             android:background="@drawable/life_text_selector"
-            style="@style/MyTextView"
-            />
+            android:padding="5dp"
+            android:textColor="@color/black" />
 
 
     </RelativeLayout>
+
     <com.example.bingjiazheng.propertyhousekeeper.Ui.SquareLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/mPieChart"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
     </com.example.bingjiazheng.propertyhousekeeper.Ui.SquareLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:padding="10dp"
+        android:paddingEnd="20dp"
+        android:paddingStart="20dp">
+
         <Button
+            android:id="@+id/bt_spend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:text="支出图表"/>
+            android:background="@drawable/data_analyze_selector"
+            android:text="支出图表"
+            android:textColor="@color/data_analyze_text_selector" />
+
         <Button
+            android:id="@+id/bt_income"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="20dp"
-            android:text="收入图表"/>
+            android:background="@drawable/data_analyze_selector"
+            android:text="收入图表"
+            android:textColor="@color/data_analyze_text_selector" />
     </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/bt_spend_plan"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="支出规划"/>
+        <Button
+            android:id="@+id/bt_invest_analysis"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="投资分析"/>
+    </LinearLayout>
 </LinearLayout>
