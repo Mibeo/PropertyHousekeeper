@@ -160,6 +160,7 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
     public List<String> getDataSource() {
         data = new ArrayList<>();
         getData();
+        /*getData2(Life_Stage,data);*/
         return data;
     }
 

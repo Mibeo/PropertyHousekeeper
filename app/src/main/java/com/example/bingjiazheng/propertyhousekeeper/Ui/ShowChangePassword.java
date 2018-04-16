@@ -1,5 +1,6 @@
 package com.example.bingjiazheng.propertyhousekeeper.Ui;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +11,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.bingjiazheng.propertyhousekeeper.R;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.content.Context.INPUT_METHOD_SERVICE;
 
@@ -31,10 +35,11 @@ public class ShowChangePassword extends Dialog implements View.OnClickListener {
     private String title;
     private int i;
 
-    public ShowChangePassword(Context context,int thenmResId,OnCloseListener listener){
-        super(context,thenmResId);
+    public ShowChangePassword(Context context, int thenmResId, OnCloseListener listener) {
+        super(context, thenmResId);
         this.mContext = context;
         this.listener = listener;
+
     }
 
     @Override
@@ -45,10 +50,12 @@ public class ShowChangePassword extends Dialog implements View.OnClickListener {
         setCancelable(false);
         initView();
     }
+
     public ShowChangePassword setTitle(String title) {
         this.title = title;
         return this;
     }
+
     private void initView() {
         editText = (EditText) findViewById(R.id.et_password);
         titleTxt = (TextView) findViewById(R.id.tv_title);
@@ -67,6 +74,15 @@ public class ShowChangePassword extends Dialog implements View.OnClickListener {
         if (!TextUtils.isEmpty(title)) {
             titleTxt.setText(title);
         }
+        new Timer().schedule(new TimerTask()
+                             {
+                                 @SuppressLint("WrongConstant")
+                                 public void run()
+                                 {
+                                     ((InputMethodManager)editText.getContext().getSystemService("input_method")).showSoftInput(editText, 0);
+                                 }
+                             }
+                , 100L);
 //        InputMethodManager im = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
 //        im.showSoftInput(getCurrentFocus(), 0);
     }

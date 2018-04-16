@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -38,12 +40,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.getData3;
+import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.getDataSource;
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger.getData1;
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger.getData2;
 
@@ -61,14 +65,15 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
     private int Life_Stage;
     private String time, date, month, year, selector_date;
     private CustomDatePicker datePicker;
-    private Button bt_spend, bt_income,bt_spend_plan,bt_invest_analysis;
-    private String Table ;
+    private Button bt_spend, bt_income, bt_spend_details, bt_invest_analysis,bt_budget;
+    private String Table;
     private List<SingleInfo> data;
     private String user;
     private Map<String, Double> HashData;
     private double total_money = 0.0;
     private ArrayList<PieEntry> entries;
     private Spinner spinner_life;
+    private ProgressBar progressBar2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -80,6 +85,8 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
     private void initview() {
         user = getIntent().getStringExtra("user");
         Life_Stage = getIntent().getIntExtra("Life_Stage", 0);
+        progressBar2 = findViewById(R.id.progressBar2);
+        progressBar2.setProgress(50);
         tv_month = findViewById(R.id.tv_month);
         tv_month.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -106,10 +113,10 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
                 tv_month.setText("当前月份 : " + time.split("-")[0] + " 年 " + time.split("-")[1] + " 月");
                 selector_date = time.split("-")[0] + "-" + time.split("-")[1];
                 mPieChart.setCenterText(null);
-                if(!bt_spend.isEnabled()){
-                    spend_data_deal(Life_Stage,selector_date);
-                }else if(!bt_income.isEnabled()){
-                    income_data_deal(Life_Stage,selector_date);
+                if (!bt_spend.isEnabled()) {
+                    spend_data_deal(Life_Stage, selector_date);
+                } else if (!bt_income.isEnabled()) {
+                    income_data_deal(Life_Stage, selector_date);
                 }
 //                Log.e("time", selector_date);
                 //                tv_date.setText(time.split("-")[0]+"-"+time.split("-")[1]);
@@ -139,10 +146,12 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
         bt_income.setOnClickListener(this);
         bt_spend.setEnabled(false);
         bt_income.setEnabled(true);
-        bt_spend_plan = findViewById(R.id.bt_spend_plan);
-        bt_spend_plan.setOnClickListener(this);
+        bt_spend_details = findViewById(R.id.bt_spend_details);
+        bt_spend_details.setOnClickListener(this);
         bt_invest_analysis = findViewById(R.id.bt_invest_analysis);
         bt_invest_analysis.setOnClickListener(this);
+        bt_budget = findViewById(R.id.bt_budget);
+        bt_budget.setOnClickListener(this);
         spinner_life = findViewById(R.id.spinner_life);
         ArrayAdapter<String> spinnerAadapter = new ArrayAdapter<String>(this,
                 R.layout.custom_spiner_text_item2, getDataSource());
@@ -160,34 +169,34 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
                 switch (data) {
                     case "学生":
                         Life_Stage = 1;
-                        if(!bt_spend.isEnabled()){
-                            spend_data_deal(Life_Stage,selector_date);
-                        }else if(!bt_income.isEnabled()){
-                            income_data_deal(Life_Stage,selector_date);
+                        if (!bt_spend.isEnabled()) {
+                            spend_data_deal(Life_Stage, selector_date);
+                        } else if (!bt_income.isEnabled()) {
+                            income_data_deal(Life_Stage, selector_date);
                         }
                         break;
                     case "工作未婚":
                         Life_Stage = 2;
-                        if(!bt_spend.isEnabled()){
-                            spend_data_deal(Life_Stage,selector_date);
-                        }else if(!bt_income.isEnabled()){
-                            income_data_deal(Life_Stage,selector_date);
+                        if (!bt_spend.isEnabled()) {
+                            spend_data_deal(Life_Stage, selector_date);
+                        } else if (!bt_income.isEnabled()) {
+                            income_data_deal(Life_Stage, selector_date);
                         }
                         break;
                     case "工作已婚":
                         Life_Stage = 3;
-                        if(!bt_spend.isEnabled()){
-                            spend_data_deal(Life_Stage,selector_date);
-                        }else if(!bt_income.isEnabled()){
-                            income_data_deal(Life_Stage,selector_date);
+                        if (!bt_spend.isEnabled()) {
+                            spend_data_deal(Life_Stage, selector_date);
+                        } else if (!bt_income.isEnabled()) {
+                            income_data_deal(Life_Stage, selector_date);
                         }
                         break;
                     case "退休":
                         Life_Stage = 4;
-                        if(!bt_spend.isEnabled()){
-                            spend_data_deal(Life_Stage,selector_date);
-                        }else if(!bt_income.isEnabled()){
-                            income_data_deal(Life_Stage,selector_date);
+                        if (!bt_spend.isEnabled()) {
+                            spend_data_deal(Life_Stage, selector_date);
+                        } else if (!bt_income.isEnabled()) {
+                            income_data_deal(Life_Stage, selector_date);
                         }
                         break;
                 }
@@ -258,7 +267,7 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
 //        setData(entries);
 
 //        mPieChart.animateY(1400, Easing.EasingOption.EaseInOutQuad);
-        spend_data_deal(Life_Stage,selector_date);
+        spend_data_deal(Life_Stage, selector_date);
         Legend l = mPieChart.getLegend();
 //        l.setVerticalAlignment(Legend.LegendVerticalAlignment.TOP);
         l.setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
@@ -274,63 +283,83 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
         mPieChart.setEntryLabelTextSize(12f);
 
     }
-    private void income_data_deal(int Life_Stage,String selector_date) {
+
+    private void income_data_deal(int Life_Stage, String selector_date) {
         total_money = 0.0;
         Table = "income_db";
-        data.clear();
-        HashData.clear();
-        data = getData3(this, Table, user, Life_Stage, selector_date);
-        for (int i = 0; i < data.size(); i++) {
-            if (HashData.containsKey(data.get(i).getType())) {
-                total_money += data.get(i).getMoney();
-                Double aDouble = HashData.get(data.get(i).getType());
-                aDouble = aDouble + data.get(i).getMoney();
-                HashData.put(data.get(i).getType(), aDouble);
-            } else {
-                total_money += data.get(i).getMoney();
-                HashData.put(data.get(i).getType(), data.get(i).getMoney());
-            }
+        if(data!=null){
+            data.clear();
         }
-        Iterator iterator = HashData.entrySet().iterator();
+        if(HashData!=null){
+            HashData.clear();
+        }
         entries.clear();
-        while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
-            entries.add(new PieEntry((Float.valueOf(entry.getValue()+"") / Float.valueOf(total_money+"") * 100), entry.getKey()+""));
-        }
-        mPieChart.invalidate();
-        setData(entries);
-        mPieChart.setCenterText(generateCenterSpannableText("income_total"));
+        data = getData3(this, Table, user, Life_Stage, selector_date);
+        if(data!=null){
+            for (int i = 0; i < data.size(); i++) {
+                if (HashData.containsKey(data.get(i).getType())) {
+                    total_money += data.get(i).getMoney();
+                    Double aDouble = HashData.get(data.get(i).getType());
+                    aDouble = aDouble + data.get(i).getMoney();
+                    HashData.put(data.get(i).getType(), aDouble);
+                } else {
+                    total_money += data.get(i).getMoney();
+                    HashData.put(data.get(i).getType(), data.get(i).getMoney());
+                }
+            }
+            Iterator iterator = HashData.entrySet().iterator();
+
+            while (iterator.hasNext()) {
+                Map.Entry entry = (Map.Entry) iterator.next();
+                entries.add(new PieEntry((Float.valueOf(entry.getValue() + "") / Float.valueOf(total_money + "") * 100), entry.getKey() + ""));
+            }
+            mPieChart.invalidate();
+            setData(entries);
+            mPieChart.setCenterText(generateCenterSpannableText("income_total"));
 //        generateCenterSpannableText("income_total");
+        }
+
     }
 
-    private void spend_data_deal(int Life_Stage,String selector_date) {
+    private void spend_data_deal(int Life_Stage, String selector_date) {
         total_money = 0.0;
         Table = "spend_db";
-        data.clear();
-        HashData.clear();
-        data = getData3(this, Table, user, Life_Stage, selector_date);
-        for (int i = 0; i < data.size(); i++) {
-            if (HashData.containsKey(data.get(i).getType())) {
-                total_money += data.get(i).getMoney();
-                Double aDouble = HashData.get(data.get(i).getType());
-                aDouble = aDouble + data.get(i).getMoney();
-                HashData.put(data.get(i).getType(), aDouble);
-            } else {
-                total_money += data.get(i).getMoney();
-                HashData.put(data.get(i).getType(), data.get(i).getMoney());
-            }
+        if(data!=null){
+            data.clear();
         }
-        Iterator iterator = HashData.entrySet().iterator();
+        if(HashData!=null){
+            HashData.clear();
+        }
         entries.clear();
-        while (iterator.hasNext()) {
-            Map.Entry entry = (Map.Entry) iterator.next();
-            entries.add(new PieEntry((Float.valueOf(entry.getValue()+"") / Float.valueOf(total_money+"") * 100), entry.getKey()+""));
+        data = getData3(this, Table, user, Life_Stage, selector_date);
+        if(data!=null){
+            for (int i = 0; i < data.size(); i++) {
+                if (HashData.containsKey(data.get(i).getType())) {
+                    total_money += data.get(i).getMoney();
+                    Double aDouble = HashData.get(data.get(i).getType());
+                    aDouble = aDouble + data.get(i).getMoney();
+                    HashData.put(data.get(i).getType(), aDouble);
+                } else {
+                    total_money += data.get(i).getMoney();
+                    HashData.put(data.get(i).getType(), data.get(i).getMoney());
+                }
+            }
+            Iterator iterator = HashData.entrySet().iterator();
+
+            while (iterator.hasNext()) {
+                Map.Entry entry = (Map.Entry) iterator.next();
+                entries.add(new PieEntry((Float.valueOf(entry.getValue() + "") / Float.valueOf(total_money + "") * 100), entry.getKey() + ""));
+            }
+            mPieChart.invalidate();
+            setData(entries);
+            mPieChart.setCenterText(generateCenterSpannableText("spend_total"));
         }
-        mPieChart.invalidate();
-        setData(entries);
-        mPieChart.setCenterText(generateCenterSpannableText("spend_total"));
+
+
+
 //        generateCenterSpannableText("spend_total");
     }
+
     private void dealdata(String Table, String selector_date) {
         data = new ArrayList<>();
         HashData = new HashMap<String, Double>();
@@ -393,10 +422,10 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
         //原文：MPAndroidChart\ndeveloped by Philipp Jahoda
 //        SpannableString s = new SpannableString("刘某人程序员\n我仿佛听到有人说我帅");
         SpannableString s = null;
-        if(Type_Text .equals("spend_total")){
-             s = new SpannableString("总支出\n"+total_money+"元");
-        }else if(Type_Text.equals("income_total")){
-             s = new SpannableString("总收入\n"+total_money+"元");
+        if (Type_Text.equals("spend_total")) {
+            s = new SpannableString("总支出\n" + total_money + "元");
+        } else if (Type_Text.equals("income_total")) {
+            s = new SpannableString("总收入\n" + total_money + "元");
         }
 
         //s.setSpan(new RelativeSizeSpan(1.7f), 0, 14, 0);
@@ -424,31 +453,38 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
             case R.id.bt_spend:
                 bt_spend.setEnabled(false);
                 bt_income.setEnabled(true);
-                spend_data_deal(Life_Stage,selector_date);
+                spend_data_deal(Life_Stage, selector_date);
                 break;
             case R.id.bt_income:
                 bt_spend.setEnabled(true);
                 bt_income.setEnabled(false);
-                income_data_deal(Life_Stage,selector_date);
+                income_data_deal(Life_Stage, selector_date);
                 break;
-            case R.id.bt_spend_plan:
+            case R.id.bt_spend_details:
                 Intent intent = new Intent(this,SpendPlanActivity.class);
                 intent.putExtra("user",user);
                 intent.putExtra("Life_Stage",Life_Stage);
                 startActivity(intent);
+                break;
+            case R.id.bt_budget:
+                Intent intent1 = new Intent(this,MyBudgetActivity.class);
+                intent1.putExtra("user",user);
+                intent1.putExtra("Life_Stage",Life_Stage);
+                startActivity(intent1);
                 break;
             case R.id.bt_invest_analysis:
 
                 break;
         }
     }
-    public List<String> getDataSource() {
+
+    /*public List<String> getDataSource() {
         List<String> spinnerList = new ArrayList<String>();
         spinnerList.add("学生");
         spinnerList.add("工作未婚");
         spinnerList.add("工作已婚");
         spinnerList.add("退休");
         return spinnerList;
-    }
+    }*/
 
 }

@@ -8,6 +8,8 @@ public class Constant {
     public static final int Spend_db = 1;
     public static final int Income_db = 2;
     public static final int Flag_db = 3;
+    public static final int Data_Analyze = 4;
+
     public static final int Life_Student = 1;
     public static final int Life_Work_Unmarried = 2;
     public static final int Life_Work_married = 3;

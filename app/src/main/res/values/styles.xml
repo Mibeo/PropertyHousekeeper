@@ -122,6 +122,10 @@
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/black</item>
     </style>
+    <style name="MyBudgetTextView">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
 
     <style name="ThemeDialog" parent="Theme.AppCompat.Light.NoActionBar" type="text/css">
         <item name="colorPrimary">@color/colorPrimary</item>

@@ -81,7 +81,7 @@ public abstract class SpendIncomeContentActivity extends AppCompatActivity {
     private void initView() {
         user = getIntent().getStringExtra("user");
         Life_Stage = getIntent().getIntExtra("Life_Stage", 0);
-        v = this.getLayoutInflater().inflate(R.layout.list_refresh, null);
+//        v = this.getLayoutInflater().inflate(R.layout.list_refresh, null);
         listView = (ListView) super.findViewById(R.id.listview);
         tv_Title = findViewById(R.id.tv_Title);
         /*spinner_life = findViewById(R.id.spinner_life);
