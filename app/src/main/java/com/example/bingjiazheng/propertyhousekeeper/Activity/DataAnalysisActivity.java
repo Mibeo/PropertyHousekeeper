@@ -83,10 +83,10 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
     }
 
     private void initview() {
-        user = getIntent().getStringExtra("user");
-        Life_Stage = getIntent().getIntExtra("Life_Stage", 0);
-        progressBar2 = findViewById(R.id.progressBar2);
-        progressBar2.setProgress(50);
+//        user = getIntent().getStringExtra("user");
+//        Life_Stage = getIntent().getIntExtra("Life_Stage", 0);
+        user = "123";
+        Life_Stage = 1;
         tv_month = findViewById(R.id.tv_month);
         tv_month.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -159,7 +159,6 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
                 .setDropDownViewResource(R.layout.custom_spinner_dropdown_item);
         spinner_life.setAdapter(spinnerAadapter);
         spinner_life.setSelection(Life_Stage - 1);
-
         helper = DbManger.getIntance(this);
         sqLiteDatabase = helper.getWritableDatabase();
         spinner_life.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -294,6 +293,7 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
             HashData.clear();
         }
         entries.clear();
+
         data = getData3(this, Table, user, Life_Stage, selector_date);
         if(data!=null){
             for (int i = 0; i < data.size(); i++) {
@@ -315,10 +315,12 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
             }
             mPieChart.invalidate();
             setData(entries);
-            mPieChart.setCenterText(generateCenterSpannableText("income_total"));
+            Log.e("total_money",total_money+"");
+
 //        generateCenterSpannableText("income_total");
         }
-
+        mPieChart.setCenterText(generateCenterSpannableText("income_total", total_money));
+        mPieChart.invalidate();
     }
 
     private void spend_data_deal(int Life_Stage, String selector_date) {
@@ -331,6 +333,7 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
             HashData.clear();
         }
         entries.clear();
+
         data = getData3(this, Table, user, Life_Stage, selector_date);
         if(data!=null){
             for (int i = 0; i < data.size(); i++) {
@@ -350,13 +353,13 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
                 Map.Entry entry = (Map.Entry) iterator.next();
                 entries.add(new PieEntry((Float.valueOf(entry.getValue() + "") / Float.valueOf(total_money + "") * 100), entry.getKey() + ""));
             }
-            mPieChart.invalidate();
+//            mPieChart.invalidate();
             setData(entries);
-            mPieChart.setCenterText(generateCenterSpannableText("spend_total"));
+            Log.e("total_money",total_money+"");
+
         }
-
-
-
+        mPieChart.setCenterText(generateCenterSpannableText("spend_total", total_money));
+        mPieChart.invalidate();
 //        generateCenterSpannableText("spend_total");
     }
 
@@ -418,7 +421,7 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
     }
 
     //设置中间文字
-    private SpannableString generateCenterSpannableText(String Type_Text) {
+    private SpannableString generateCenterSpannableText(String Type_Text,double total_money) {
         //原文：MPAndroidChart\ndeveloped by Philipp Jahoda
 //        SpannableString s = new SpannableString("刘某人程序员\n我仿佛听到有人说我帅");
         SpannableString s = null;

@@ -1,6 +1,9 @@
 package com.example.bingjiazheng.propertyhousekeeper.Adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,15 +13,22 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.BudgetSingleInfo;
+import com.example.bingjiazheng.propertyhousekeeper.Entity.MySQLiteHelper;
 import com.example.bingjiazheng.propertyhousekeeper.R;
 import com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger;
+import com.example.bingjiazheng.propertyhousekeeper.Utils.DbManger;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.Table;
 import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.getData;
 import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.get_budget_data;
+import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.get_spend_Data;
+import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.list_key;
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger.getData1;
 
 /**
@@ -28,18 +38,42 @@ import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger.getD
 public class BudgetAdapter extends BaseAdapter {
     private List<BudgetSingleInfo> TypeData;
     private Context context;
+    private String Table;
+    private MySQLiteHelper helper;
+
+    private SQLiteDatabase sqLiteDatabase;
 //    private LayoutInflater inflater;//界面生成器
 
-    public BudgetAdapter(Context context, String user, int Life_Stage, String budget_month) {
+    public BudgetAdapter(Context context, String user, String Table,int Life_Stage, String budget_month) {
         TypeData = new ArrayList<>();
+        helper = DbManger.getIntance(context);
+        sqLiteDatabase = helper.getWritableDatabase();
         this.context = context;
+        this.Table = Table;
         if (!TypeData.isEmpty()) {
             TypeData.clear();
         }
+        if(!list_key.isEmpty()){
+            list_key.clear();
+        }
         TypeData = get_budget_data(context, user, Life_Stage, budget_month);
-//        getData1(Life_Stage, TypeData);
-        Log.e("TypeData",TypeData.toString());
-//        inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Log.e("TypeData",TypeData.size()+"");
+        HashMap<String, Double> spend_db = DataServer.get_spend_Data(context, user, "spend_db", Life_Stage, budget_month);
+        Log.e("spend_db",spend_db.toString());
+        for(int i = 0;i <spend_db.size();i++){
+            for(int j = 0;j<TypeData.size();j++){
+                if(list_key.get(i).equals(TypeData.get(j).getType())){
+                    sqLiteDatabase = helper.getWritableDatabase();
+                    sqLiteDatabase.execSQL("update '" + "budget_db" + "'set user='" + user + "',life='" + Life_Stage + "',type='" + list_key.get(i)
+                            +"',spended_money='"+spend_db.get(list_key.get(i))+ "',budget_month='" + budget_month + "' where " + "_id='" + TypeData.get(j).get_id() + "'");
+                }
+            }
+        }
+        if(!TypeData.isEmpty()){
+            TypeData.clear();
+        }
+        TypeData = get_budget_data(context, user, Life_Stage, budget_month);
+        sqLiteDatabase.close();
     }
 
     @Override
@@ -75,15 +109,26 @@ public class BudgetAdapter extends BaseAdapter {
         }
         if (TypeData != null) {
             viewHolder.tv_type.setText(TypeData.get(position).getType());
-            viewHolder.tv_budget_money.setText("预算 ￥"+String.valueOf(TypeData.get(position).getBudget_money()));
-            viewHolder.tv_remaining_money.setText("余额 ￥"+String.valueOf(TypeData.get(position).getRemaining_money()));
-            viewHolder.progressBar.setProgress(40);
-            viewHolder.tv_budget_money.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Toast.makeText(context, "hhh", Toast.LENGTH_SHORT).show();
-                }
-            });
+            double budget_money = TypeData.get(position).getBudget_money();
+            viewHolder.tv_budget_money.setText("预算 ￥"+ budget_money);
+            double remaining_money = 0.0;
+            if(budget_money!=0.0){
+                remaining_money = budget_money - TypeData.get(position).getSpended_money();
+            }
+
+            viewHolder.tv_remaining_money.setText("余额 ￥"+remaining_money);
+            if (remaining_money < 0) {
+                viewHolder.tv_remaining_money.setTextColor(Color.parseColor("#FF0000"));
+//                viewHolder.progressBar.setBackgroundColor(Color.parseColor("#FF0000"));
+                viewHolder.progressBar.setDrawingCacheBackgroundColor(Color.parseColor("#FF0000"));
+            } else {
+                viewHolder.tv_remaining_money.setTextColor(Color.parseColor("#000000"));
+            }
+            double progress = 0;
+            if(budget_money!=0.0){
+                progress = remaining_money / budget_money *100;
+            }
+            viewHolder.progressBar.setProgress((int) progress);
             return convertView;
         } else {
             return null;

@@ -44,10 +44,10 @@ public class ListviewAdapter extends BaseAdapter {
             HashData.clear();
         }
         HashData = DataServer.get_spend_Data(context, user, "spend_db", Life_Stage, selector_date);
-        if (HashData==null) {
+        Log.e("HashData",HashData.toString());
+        if (HashData.isEmpty()) {
             HashdataisNull = true;
         }
-        Log.e("HashData",HashData.toString());
     }
 
     public ListviewAdapter(Context context, String user, int Table, int Life_Stage) {

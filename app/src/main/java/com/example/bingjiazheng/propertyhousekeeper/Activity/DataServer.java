@@ -155,18 +155,18 @@ public class DataServer {
 //        }
     }
 
-    public static List<SingleInfo> getData3(Context context, String table, String user, int Life_Stage, String date) {
+    public static List<SingleInfo> getData3(Context context, String Table, String user, int Life_Stage, String date) {
         data = new ArrayList<SingleInfo>();
         helper = DbManger.getIntance(context);
         sqLiteDatabase = helper.getWritableDatabase();
         Cursor cursor = null;
 //        cursor = sqLiteDatabase.rawQuery("select count(*)  from sqlite_master where type ='table' and name = 'table' ", null);
-        cursor = sqLiteDatabase.rawQuery("select count(*)  from sqlite_master where type ='table' and name = '" + table + "';", null);
+        cursor = sqLiteDatabase.rawQuery("select count(*)  from sqlite_master where type ='table' and name = '" + Table + "'", null);
         if (cursor.moveToNext()) {
             int count = cursor.getInt(0);
             if (count > 0) {
 //                result = true;
-                cursor = sqLiteDatabase.query(table, null, "user like ? and life like ? and date like ? ", new String[]{user, Life_Stage + "", "%" + date + "%"}, null, null, null);
+                cursor = sqLiteDatabase.query(Table, null, "user like ? and life like ? and date like ? ", new String[]{user, Life_Stage + "", "%" + date + "%"}, null, null, null);
                 if (cursor == null) {
                     return null;
                 } else {
@@ -211,10 +211,10 @@ public class DataServer {
 
     public static HashMap<String, Double> get_spend_Data(Context context, String user, String Table, int Life_Stage, String selector_date) {
         total_money = 0.0;
-        if (plan_data != null) {
+        if (!plan_data .isEmpty()) {
             plan_data.clear();
         }
-        if (HashData != null) {
+        if (!HashData .isEmpty()) {
             HashData.clear();
         }
         plan_data = getData3(context, Table, user, Life_Stage, selector_date);
@@ -261,24 +261,21 @@ public class DataServer {
         Cursor cursor = null;
         cursor = sqLiteDatabase.rawQuery("select count(*)  from sqlite_master where type ='table' and name ='budget_db' ", null);
         if (cursor.moveToNext()) {
-            Log.e("cursor", 1 + "");
             int count = cursor.getInt(0);
-            Log.e("count", count + "");
             if (count > 0) {
-                Log.e("cursor", 2 + "");
                 cursor = sqLiteDatabase.query("budget_db", null, "user like ? and life like ? and budget_month like ? ", new String[]{user, Life_Stage + "", budget_month}, null, null, null);
-                Log.e("cursor", cursor.toString());
                 if (cursor == null) {
                     return null;
                 }
                 if (!cursor.moveToNext()) {
-                    addbudegetdata(user, Life_Stage, 0, 0, 0, budget_month);
-                    cursor = sqLiteDatabase.query("budget_db", null, "user like ? and life like ? and budget_month like ? ", new String[]{user, Life_Stage + "", budget_month}, null, null, null);
+                    addbudegetdata(context,user, Life_Stage, 0, 0, 0, budget_month);
+//                    cursor = sqLiteDatabase.query("budget_db", null, "user like ? and life like ? and budget_month like ? ", new String[]{user, Life_Stage + "", budget_month}, null, null, null);
                 }
-                Log.e("cur", cursor.moveToNext() + "");
+                sqLiteDatabase = helper.getWritableDatabase();
+                cursor = sqLiteDatabase.query("budget_db", null, "user like ? and life like ? and budget_month like ? ", new String[]{user, Life_Stage + "", budget_month}, null, null, null);
                 while (cursor.moveToNext()) {
-                    Log.e("cursor", 4 + "");
                     BudgetSingleInfo budgetSingleInfo = new BudgetSingleInfo();
+                    budgetSingleInfo.set_id(cursor.getInt(cursor.getColumnIndex("_id")));
                     budgetSingleInfo.setType(cursor.getString(cursor.getColumnIndex("type")));
                     budgetSingleInfo.setBudget_money(cursor.getDouble(cursor.getColumnIndex("budget_money")));
                     budgetSingleInfo.setSpended_money(cursor.getDouble(cursor.getColumnIndex("spended_money")));
@@ -287,35 +284,84 @@ public class DataServer {
                 }
                 cursor.close();
                 sqLiteDatabase.close();
-                Log.e("cursor", 5 + "");
                 return budgetSingleInfos;
-
             } else {
-                Log.e("cursor", 6 + "");
                 return null;
             }
         } else {
-            Log.e("cursor", 7 + "");
             return null;
         }
     }
 
-    public static void addbudegetdata(String user, int life, double budget_money, double spended_money,
+    public static void addbudegetdata(Context context,String user, int life, double budget_money, double spended_money,
                                       double remaining_money, String budget_month) {
         sqLiteDatabase = helper.getWritableDatabase();
         List<String> typedata = new ArrayList<>();
         getData1(life, typedata);
-        Log.e("typedata", typedata.toString());
+        if(!HashData.isEmpty()){
+            HashData.clear();
+        }
+        if(!list_key.isEmpty()){
+            list_key.clear();
+        }
+        Table = "spend_db";
+        HashData = DataServer.get_spend_Data(context,user,Table,life,budget_month);
+        double d =0.0;
+        //HashData.get(list_key.get(position))
         for (int i = 0; i < typedata.size(); i++) {
+            sqLiteDatabase = helper.getWritableDatabase();
             ContentValues contentValues = new ContentValues();
             contentValues.put("user", user);
             contentValues.put("life", life);
             contentValues.put("type", typedata.get(i));
             contentValues.put("budget_money", budget_money);
-            contentValues.put("spended_money", spended_money);
+//            Log.e("list_key",list_key.get(i));
+            if(HashData.containsKey(typedata.get(i))){
+                for (int j = 0; j<HashData.size();j++){
+                    if(list_key.get(j).equals(typedata.get(i))){
+                        contentValues.put("spended_money", HashData.get(list_key.get(j)));
+                    }
+                }
+            }else {
+                contentValues.put("spended_money", 0.0);
+            }
             contentValues.put("remaining_money", remaining_money);
             contentValues.put("budget_month", budget_month);
             sqLiteDatabase.insert("budget_db", null, contentValues);
+            sqLiteDatabase.close();
+        }
+    }
+    private void update_spend_remaining_data(Context context,int Life_Stage, String selector_date) {
+        total_money = 0.0;
+        Table = "spend_db";
+        if (data != null) {
+            data.clear();
+        }
+        if (HashData != null) {
+            HashData.clear();
+        }
+        data = getData3(context, Table, user, Life_Stage, selector_date);
+        if (data != null) {
+            for (int i = 0; i < data.size(); i++) {
+                if (HashData.containsKey(data.get(i).getType())) {
+                    total_money += data.get(i).getMoney();
+                    Double aDouble = HashData.get(data.get(i).getType());
+                    aDouble = aDouble + data.get(i).getMoney();
+                    HashData.put(data.get(i).getType(), aDouble);
+                } else {
+                    total_money += data.get(i).getMoney();
+                    HashData.put(data.get(i).getType(), data.get(i).getMoney());
+                }
+            }
+            if (!HashData.isEmpty()) {
+//                addbudegetdata(user, Life_Stage, 0.0, 0.0, 0.0, selector_date);
+                Iterator iterator = HashData.entrySet().iterator();
+                while (iterator.hasNext()) {
+                    Map.Entry entry = (Map.Entry) iterator.next();
+//                    update_spend_data(user, Life_Stage, String.valueOf(entry.getKey()), budget_money, total_money, 0.0, selector_date);
+//                    update_spended_data(user, Life_Stage, (String) entry.getKey(), (Double) entry.getValue(), selector_date);
+                }
+            }
         }
     }
 }
