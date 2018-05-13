@@ -1,11 +1,9 @@
 package com.example.bingjiazheng.propertyhousekeeper.ContentActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,10 +16,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.bingjiazheng.propertyhousekeeper.Activity.ModifyDeleteActivity;
-import com.example.bingjiazheng.propertyhousekeeper.Activity.ModifyNoteActivity;
 import com.example.bingjiazheng.propertyhousekeeper.Adapter.ListviewAdapter;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.MySQLiteHelper;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.SingleInfo;
@@ -29,11 +25,7 @@ import com.example.bingjiazheng.propertyhousekeeper.R;
 import com.example.bingjiazheng.propertyhousekeeper.Utils.Constant;
 import com.example.bingjiazheng.propertyhousekeeper.Utils.DbManger;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.getDataSource;
-import static com.example.bingjiazheng.propertyhousekeeper.Utils.ToastUtil.showText;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.getDataSource;
 
 /**
  * Created by bingjia.zheng on 2018/4/4.

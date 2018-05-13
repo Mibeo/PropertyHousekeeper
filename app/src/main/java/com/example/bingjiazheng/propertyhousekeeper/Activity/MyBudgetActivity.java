@@ -3,12 +3,10 @@ package com.example.bingjiazheng.propertyhousekeeper.Activity;
 import android.app.Dialog;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
@@ -17,7 +15,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.bingjiazheng.propertyhousekeeper.Adapter.BudgetAdapter;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.BudgetSingleInfo;
@@ -26,10 +23,8 @@ import com.example.bingjiazheng.propertyhousekeeper.Entity.SingleInfo;
 import com.example.bingjiazheng.propertyhousekeeper.R;
 import com.example.bingjiazheng.propertyhousekeeper.Ui.CustomDatePicker;
 import com.example.bingjiazheng.propertyhousekeeper.Ui.ShowChangePassword;
+import com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer;
 import com.example.bingjiazheng.propertyhousekeeper.Utils.DbManger;
-import com.github.mikephil.charting.data.PieEntry;
-
-import org.w3c.dom.Text;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,11 +34,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.addbudegetdata;
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.getData3;
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.getDataSource;
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.get_spend_Data;
-import static com.example.bingjiazheng.propertyhousekeeper.Utils.ToastUtil.showText;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.getData3;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.getDataSource;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.get_spend_Data;
 
 /**
  * Created by bingjia.zheng on 2018/4/16.

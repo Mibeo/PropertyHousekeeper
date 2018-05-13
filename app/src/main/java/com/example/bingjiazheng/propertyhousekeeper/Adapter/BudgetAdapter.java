@@ -1,6 +1,5 @@
 package com.example.bingjiazheng.propertyhousekeeper.Adapter;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
@@ -11,25 +10,19 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer;
+import com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.BudgetSingleInfo;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.MySQLiteHelper;
 import com.example.bingjiazheng.propertyhousekeeper.R;
-import com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger;
 import com.example.bingjiazheng.propertyhousekeeper.Utils.DbManger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.Table;
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.getData;
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.get_budget_data;
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.get_spend_Data;
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.list_key;
-import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger.getData1;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.get_budget_data;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.list_key;
 
 /**
  * Created by bingjia.zheng on 2018/4/16.

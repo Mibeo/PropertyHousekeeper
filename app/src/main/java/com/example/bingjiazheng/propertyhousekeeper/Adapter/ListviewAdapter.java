@@ -1,7 +1,6 @@
 package com.example.bingjiazheng.propertyhousekeeper.Adapter;
 
 import android.content.Context;
-import android.graphics.drawable.shapes.PathShape;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,19 +8,17 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-import com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer;
+import com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.SingleInfo;
 import com.example.bingjiazheng.propertyhousekeeper.R;
 import com.example.bingjiazheng.propertyhousekeeper.Utils.Constant;
-
-import org.w3c.dom.Text;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.List;
 
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.total_money;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.total_money;
 
 /**
  * Created by bingjia.zheng on 2018/3/28.

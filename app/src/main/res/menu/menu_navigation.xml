@@ -3,7 +3,7 @@
     <group android:id="@+id/Unselected">
         <item
             android:id="@+id/unselected"
-            android:icon="@drawable/bg_drawer_navigation_one"
+            android:icon="@drawable/unselector"
             android:title="未选择"
             />
     </group>
@@ -11,27 +11,27 @@
         <item
             android:id="@+id/student"
             android:actionLayout="@layout/drawer_navigation_badge"
-            android:icon="@drawable/bg_drawer_navigation_two"
+            android:icon="@drawable/student"
             android:title="学生"
             />
     </group>
     <group android:id="@+id/Work_unmarried">
         <item
             android:id="@+id/work_unmarried"
-            android:icon="@drawable/bg_drawer_navigation_three"
+            android:icon="@drawable/workunmarried"
             android:title="工作未婚"
             />
     </group>
     <group android:id="@+id/Work_married">
         <item
             android:id="@+id/work_married"
-            android:icon="@drawable/bg_drawer_navigation_four"
+            android:icon="@drawable/workmarried"
             android:title="工作已婚"/>
     </group>
     <group android:id="@+id/Retire">
         <item
             android:id="@+id/retire"
-            android:icon="@drawable/tab_host"
+            android:icon="@drawable/retired"
             android:title="退休"
             />
     </group>

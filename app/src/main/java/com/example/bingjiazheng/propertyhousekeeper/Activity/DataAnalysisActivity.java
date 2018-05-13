@@ -5,7 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.text.SpannableString;
 import android.util.Log;
@@ -18,7 +17,6 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.bingjiazheng.propertyhousekeeper.Adapter.ListviewAdapter;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.MySQLiteHelper;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.SingleInfo;
 import com.example.bingjiazheng.propertyhousekeeper.R;
@@ -40,14 +38,13 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.getData3;
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.getDataSource;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.getData3;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.getDataSource;
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger.getData1;
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger.getData2;
 
@@ -83,10 +80,10 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
     }
 
     private void initview() {
-//        user = getIntent().getStringExtra("user");
-//        Life_Stage = getIntent().getIntExtra("Life_Stage", 0);
-        user = "123";
-        Life_Stage = 1;
+        user = getIntent().getStringExtra("user");
+        Life_Stage = getIntent().getIntExtra("Life_Stage", 0);
+//        user = "123";
+//        Life_Stage = 1;
         tv_month = findViewById(R.id.tv_month);
         tv_month.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -476,7 +473,10 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
                 startActivity(intent1);
                 break;
             case R.id.bt_invest_analysis:
-
+                Intent intent2 = new Intent(this,InvestAnalysisActivity.class);
+                intent2.putExtra("user",user);
+                intent2.putExtra("Life_Stage",Life_Stage);
+                startActivity(intent2);
                 break;
         }
     }

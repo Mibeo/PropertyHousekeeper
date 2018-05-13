@@ -81,6 +81,7 @@
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:padding="5dp"
                 android:textColor="@color/selector_life_text"
                 android:background="@drawable/life_text_selector"

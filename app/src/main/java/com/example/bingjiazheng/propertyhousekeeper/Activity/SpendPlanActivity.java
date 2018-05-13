@@ -22,9 +22,8 @@ import com.example.bingjiazheng.propertyhousekeeper.Entity.MySQLiteHelper;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.SingleInfo;
 import com.example.bingjiazheng.propertyhousekeeper.R;
 import com.example.bingjiazheng.propertyhousekeeper.Ui.CustomDatePicker;
-import com.example.bingjiazheng.propertyhousekeeper.Utils.Constant;
+import com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer;
 import com.example.bingjiazheng.propertyhousekeeper.Utils.DbManger;
-import com.github.mikephil.charting.data.PieEntry;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,10 +34,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.getData3;
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.getDataSource;
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.get_budget_data;
-import static com.example.bingjiazheng.propertyhousekeeper.Activity.DataServer.get_spend_Data;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.getData3;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.getDataSource;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.get_budget_data;
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.utils.setListViewHeightBasedOnChildren;
 
 /**

@@ -90,6 +90,12 @@
             android:screenOrientation="portrait">
 
         </activity>
+        <activity
+            android:name=".Activity.InvestAnalysisActivity"
+
+            android:screenOrientation="portrait">
+
+        </activity>
     </application>
 
 </manifest>

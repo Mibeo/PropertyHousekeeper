@@ -117,7 +117,7 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
         mMonth = ca.get(Calendar.MONTH);
         mDay = ca.get(Calendar.DAY_OF_MONTH);
         display();
-        spinner = (Spinner) findViewById(R.id.spinner);
+        spinner = findViewById(R.id.spinner);
         // 在这里两个layout自已定义效果,不用系统自带.
         // 数据源手动添加
 

@@ -10,8 +10,9 @@
 
         <ImageView
             android:id="@+id/grid_image"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_centerInParent="true"
+            android:layout_width="80dp"
+            android:layout_height="80dp" />
     </com.example.bingjiazheng.propertyhousekeeper.Ui.SquareLayout>
 
     <RelativeLayout

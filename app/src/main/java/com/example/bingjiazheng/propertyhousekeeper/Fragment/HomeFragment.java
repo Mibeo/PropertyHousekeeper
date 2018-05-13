@@ -36,7 +36,6 @@ public class HomeFragment extends Fragment {
     private static TextView tv_life;
     private GridView gridview;
     private String user;
-
     public HomeFragment(){}
     @SuppressLint("ValidFragment")
     public HomeFragment(String user) {
@@ -51,8 +50,8 @@ public class HomeFragment extends Fragment {
         return homeFragment;
     }
 
-    private int[] imagesID = new int[]{R.mipmap.head, R.mipmap.head, R.mipmap.head,
-            R.mipmap.head,  R.mipmap.head, R.mipmap.head};
+    private int[] imagesID = new int[]{R.mipmap.addspend,  R.mipmap.addincome,
+            R.mipmap.myspend,  R.mipmap.myincome, R.mipmap.dataanalyze,R.mipmap.notes};
     private String[] grid_list = {"新增支出", "新增收入", "我的支出", "我的收入","数据分析", "收支便签"};
 
     @Override
@@ -165,13 +164,14 @@ public class HomeFragment extends Fragment {
                         }
                         break;
                 }
-                adapter.setSelection(position);
+//                adapter.setSelection(position);
                 adapter.notifyDataSetChanged();
             }
         });
         return view;
     }
 
+    @SuppressLint("HandlerLeak")
     public static Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {

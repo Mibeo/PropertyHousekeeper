@@ -1,17 +1,14 @@
-package com.example.bingjiazheng.propertyhousekeeper.Activity;
+package com.example.bingjiazheng.propertyhousekeeper.Utils;
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import android.widget.ListView;
 
-import com.example.bingjiazheng.propertyhousekeeper.Adapter.ListviewAdapter;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.BudgetSingleInfo;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.MySQLiteHelper;
 import com.example.bingjiazheng.propertyhousekeeper.Entity.SingleInfo;
-import com.example.bingjiazheng.propertyhousekeeper.Utils.DbManger;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -20,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataManger.getData1;
-import static com.example.bingjiazheng.propertyhousekeeper.Utils.ToastUtil.showText;
 
 /**
  * Created by bingjia.zheng on 2018/3/28.
@@ -33,6 +29,7 @@ public class DataServer {
     private static String user;
     private static int id = 0;
     private static List<SingleInfo> data;
+    public static String string;
 //    private static List<String> data = new ArrayList<String>();
 
     /*public static List<String> getData(int offset, int maxnumber) {
@@ -363,5 +360,62 @@ public class DataServer {
                 }
             }
         }
+    }
+    public  static String getData(int life_stage,int type){
+        switch (life_stage){
+            case 1:
+                switch (type){
+                    case 1:
+                        string = "股票、成长型基金:10% ;\n定期储蓄:80% ;\n备用:10%";
+                        break;
+                    case 2:
+                        string = "活期储蓄:10% ;\n定期储蓄:80% ;\n备用:10%\n";
+                        break;
+                    case 3:
+                        string = "定期储蓄:90% ;\n备用:10%\n";
+                        break;
+                }
+                break;
+            case 2:
+                switch (type){
+                    case 1:
+                        string = "股票、成长型基金:50% ;\n储蓄、债券:40% ;\n备用:10%\n";
+                    break;
+                    case 2:
+                        string = "股票、成长型基金:60% ;\n储蓄、债券:30% ;\n备用:10%\n";
+                    break;
+                    case 3:
+                        string = "股票、成长型基金:70% ;\n储蓄、债券:20% ;\n备用:10%\n";
+                    break;
+                }
+                break;
+            case 3:
+                switch (type){
+                    case 1:
+                        string = "股票、成长型基金:40% ;\n债券、保险:45% ;\n活期储蓄:15%\n";
+                    break;
+                    case 2:
+                        string = "股票、成长型基金:50% ;\n债券、保险:35% ;\n活期储蓄:15%\n";
+                    break;
+                    case 3:
+                        string = "股票、成长型基金:60% ;\n债券、保险:35% ;\n活期储蓄:5%\n";
+                    break;
+                }
+                break;
+            case 4:
+                switch (type){
+                    case 1:
+                        string = "股票:5% ;\n定期储蓄、债券:55% ;\n活期储蓄:40%\n";
+                    break;
+                    case 2:
+                        string = "股票:10% ;\n定期储蓄、债券:50% ;\n活期储蓄:40%\n";
+                    break;
+                    case 3:
+                        string = "股票:15% ;\n定期储蓄、债券:60% ;\n活期储蓄:35%\n";
+                    break;
+                }
+                break;
+        }
+        return string;
     }
 }
