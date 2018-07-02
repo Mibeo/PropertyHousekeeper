@@ -5,20 +5,16 @@
     android:layout_height="match_parent"
     android:background="@color/light_gray"
     android:orientation="vertical">
-
-    <include layout="@layout/layout_content_toolbar"/>
-
+    <include layout="@layout/layout_content_toolbar" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="10dp">
-
         <RelativeLayout
             android:id="@+id/ll1"
             android:layout_width="match_parent"
             android:layout_height="50dp">
-
             <TextView
                 android:id="@+id/textView"
                 style="@style/MyTextView"
@@ -26,7 +22,6 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:text="金 额 : " />
-
             <EditText
                 android:id="@+id/et_money"
                 android:layout_width="match_parent"
@@ -56,11 +51,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:padding="5dp"
                 android:layout_toEndOf="@+id/tv1"
-                android:textColor="@color/selector_life_text"
                 android:background="@drawable/life_text_selector"
-                android:text="请选择时间" />
+                android:padding="5dp"
+                android:text="请选择时间"
+                android:textColor="@color/selector_life_text" />
 
         </RelativeLayout>
 
@@ -81,12 +76,12 @@
                 android:id="@+id/spinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:padding="5dp"
-                android:textColor="@color/selector_life_text"
-                android:background="@drawable/life_text_selector"
                 android:layout_alignTop="@+id/textView2"
-                android:layout_toEndOf="@+id/textView2" />
+
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@+id/textView2"
+                android:background="@drawable/life_text_selector"
+                android:textColor="@color/selector_life_text" />
         </RelativeLayout>
 
 
@@ -155,7 +150,6 @@
                 android:theme="@style/MyEditText" />
         </RelativeLayout>
 
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -170,8 +164,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentStart="true"
-                    android:background="@drawable/shape_bt_login"
-                    android:text="取 消" />
+                    android:background="@drawable/shape_bt_login1"
+                    android:text="取 消"
+                    />
 
                 <Button
                     android:id="@+id/bt_save"
@@ -180,8 +175,10 @@
                     android:layout_alignBaseline="@+id/bt_cancel"
                     android:layout_alignBottom="@+id/bt_cancel"
                     android:layout_alignParentEnd="true"
-                    android:background="@drawable/shape_bt_login"
-                    android:text="保 存" />
+                    android:background="@drawable/shape_bt_login1"
+
+                    android:text="保 存"
+                     />
             </RelativeLayout>
         </LinearLayout>
 

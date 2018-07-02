@@ -210,7 +210,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentStart="true"
-                    android:background="@drawable/shape_bt_login"
+                    android:background="@drawable/shape_bt_login1"
                     android:text="修 改" />
 
                 <Button
@@ -220,7 +220,7 @@
                     android:layout_alignBaseline="@+id/bt_modify"
                     android:layout_alignBottom="@+id/bt_modify"
                     android:layout_alignParentEnd="true"
-                    android:background="@drawable/shape_bt_login"
+                    android:background="@drawable/shape_bt_login1"
                     android:text="删 除" />
             </RelativeLayout>
         </LinearLayout>

@@ -41,7 +41,7 @@ public class ListviewAdapter extends BaseAdapter {
             HashData.clear();
         }
         HashData = DataServer.get_spend_Data(context, user, "spend_db", Life_Stage, selector_date);
-        Log.e("HashData",HashData.toString());
+//        Log.e("HashData",HashData.toString());
         if (HashData.isEmpty()) {
             HashdataisNull = true;
         }
@@ -124,7 +124,7 @@ public class ListviewAdapter extends BaseAdapter {
             if (data != null) {
                 if (Table == Constant.Spend_db || Table == Constant.Income_db) {
                     viewHolder.tv_type.setText(data.get(position).getType());
-                    viewHolder.tv_money.setText(String.valueOf(data.get(position).getMoney()));
+                    viewHolder.tv_money.setText(data.get(position).getMoney()+"元");
                 } else if (Table == Constant.Flag_db) {
                     viewHolder.tv_text.setText(data.get(position).getText());
                 }

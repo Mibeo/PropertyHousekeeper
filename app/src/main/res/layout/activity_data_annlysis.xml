@@ -72,7 +72,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="支出详情"/>
+            android:text="支出规划"/>
         <Button
             android:id="@+id/bt_budget"
             android:layout_width="0dp"

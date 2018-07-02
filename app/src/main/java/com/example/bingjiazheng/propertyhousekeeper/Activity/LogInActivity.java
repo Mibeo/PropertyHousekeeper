@@ -80,7 +80,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
             iv_eye.setImageResource(R.mipmap.invisible);
             et_password.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
         }
-        et_user = (EditText) findViewById(R.id.et_user);
+        et_user =  findViewById(R.id.et_user);
         checkBox_self_login = findViewById(R.id.checkBox_self_login);
         checkBox_self_login.setChecked(mSettings.getBoolean("self_login", false));
         checkBox_self_login.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -162,9 +162,9 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     private void setUserPassword(String s1, String s2) {
         sqLiteDatabase = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
-        contentValues.put("user", "" + s1);
-        contentValues.put("new_password", "" + s2);
-        contentValues.put("old_password", "" + s2);
+        contentValues.put("user", s1);
+        contentValues.put("new_password", s2);
+        contentValues.put("old_password", s2);
         sqLiteDatabase.insert("password_db", null, contentValues);
         sqLiteDatabase.close();
         showText(this, "注册成功");
@@ -172,11 +172,10 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
 
     private void updateUserOldPassword(String user, String password) {
         sqLiteDatabase = helper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("old_password", password);
-        sqLiteDatabase.update("password_db", contentValues, "user=" + user, null);
+        sqLiteDatabase.execSQL("update 'password_db' set old_password='"+password+"' where "+"user='"+user+"'");
         sqLiteDatabase.close();
     }
+
 
     /*private void updatePassword(String password){
         sqLiteDatabase = helper.getWritableDatabase();
@@ -241,7 +240,7 @@ public class LogInActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void register() {
-        String user = et_user.getText().toString();
+        String user = et_user.getText()+"";
         String password = et_password.getText().toString();
         if (!"".equals(user) && !"".equals(password)) {
             if (userIsexists(user)) {

@@ -276,7 +276,7 @@ public class DataServer {
                     budgetSingleInfo.setType(cursor.getString(cursor.getColumnIndex("type")));
                     budgetSingleInfo.setBudget_money(cursor.getDouble(cursor.getColumnIndex("budget_money")));
                     budgetSingleInfo.setSpended_money(cursor.getDouble(cursor.getColumnIndex("spended_money")));
-                    budgetSingleInfo.setRemaining_money(cursor.getDouble(cursor.getColumnIndex("remaining_money")));
+//                    budgetSingleInfo.setRemaining_money(cursor.getDouble(cursor.getColumnIndex("remaining_money")));
                     budgetSingleInfos.add(budgetSingleInfo);
                 }
                 cursor.close();
@@ -322,7 +322,7 @@ public class DataServer {
             }else {
                 contentValues.put("spended_money", 0.0);
             }
-            contentValues.put("remaining_money", remaining_money);
+//            contentValues.put("remaining_money", remaining_money);
             contentValues.put("budget_month", budget_month);
             sqLiteDatabase.insert("budget_db", null, contentValues);
             sqLiteDatabase.close();
@@ -366,56 +366,129 @@ public class DataServer {
             case 1:
                 switch (type){
                     case 1:
-                        string = "股票、成长型基金:10% ;\n定期储蓄:80% ;\n备用:10%";
+                        string = "储蓄:100% ; 股票:0% ; 债券:0% ; 基金:0% ; 寿险:0% ";
                         break;
                     case 2:
-                        string = "活期储蓄:10% ;\n定期储蓄:80% ;\n备用:10%\n";
+                        string = "储蓄:75% ; 股票:0% ; 债券:15% ; 基金:10% ; 寿险:0% ";
                         break;
                     case 3:
-                        string = "定期储蓄:90% ;\n备用:10%\n";
+                        string = "储蓄:60% ; 股票:15% ; 债券:15% ; 基金:10% ; 寿险:0% ";
                         break;
                 }
                 break;
             case 2:
                 switch (type){
                     case 1:
-                        string = "股票、成长型基金:50% ;\n储蓄、债券:40% ;\n备用:10%\n";
+                        string = "储蓄:50% ; 股票:5% ; 债券:26% ; 基金:13% ; 寿险:6% ";
                     break;
                     case 2:
-                        string = "股票、成长型基金:60% ;\n储蓄、债券:30% ;\n备用:10%\n";
+                        string = "储蓄:30% ; 股票:30% ; 债券:19% ; 基金:15% ; 寿险:6% ";
                     break;
                     case 3:
-                        string = "股票、成长型基金:70% ;\n储蓄、债券:20% ;\n备用:10%\n";
+                        string = "储蓄:15% ; 股票:70% ; 债券:5% ; 基金:5% ; 寿险:5% ";
                     break;
                 }
                 break;
             case 3:
                 switch (type){
                     case 1:
-                        string = "股票、成长型基金:40% ;\n债券、保险:45% ;\n活期储蓄:15%\n";
+                        string = "储蓄:48% ; 股票:5% ; 债券:20% ; 基金:19% ; 寿险:6% ";
                     break;
                     case 2:
-                        string = "股票、成长型基金:50% ;\n债券、保险:35% ;\n活期储蓄:15%\n";
+                        string = "储蓄:30% ; 股票:28% ; 债券:12% ; 基金:24% ; 寿险:6% ";
                     break;
                     case 3:
-                        string = "股票、成长型基金:60% ;\n债券、保险:35% ;\n活期储蓄:5%\n";
+                        string = "储蓄:10% ; 股票:70% ; 债券:6% ; 基金:8% ; 寿险:6% ";
                     break;
                 }
                 break;
             case 4:
                 switch (type){
                     case 1:
-                        string = "股票:5% ;\n定期储蓄、债券:55% ;\n活期储蓄:40%\n";
+                        string = "储蓄:58% ; 股票:0% ; 债券:20% ; 基金:10% ; 寿险:12% ";
                     break;
                     case 2:
-                        string = "股票:10% ;\n定期储蓄、债券:50% ;\n活期储蓄:40%\n";
+                        string = "储蓄:35% ; 股票:22% ; 债券:15% ; 基金:18% ; 寿险:10% ";
                     break;
                     case 3:
-                        string = "股票:15% ;\n定期储蓄、债券:60% ;\n活期储蓄:35%\n";
+                        string = "储蓄:18% ; 股票:62% ; 债券:6% ; 基金:5% ; 寿险:9% ";
                     break;
                 }
                 break;
         }
         return string;
+    }
+    public static HashMap<String,Double> PercentData = new HashMap<>();
+    public static HashMap<String,Double> getPercentData(int life){
+        switch (life){
+            case 1:
+                if(!PercentData.isEmpty()){
+                    PercentData.clear();
+                }
+                PercentData.put("食品烟酒",41.0);
+                PercentData.put("衣服饰品",13.0);
+                PercentData.put("生活用品",7.0);
+                PercentData.put("行车交通",4.0);
+                PercentData.put("交流通讯",5.0);
+                PercentData.put("休闲娱乐",7.0);
+                PercentData.put("学习进修",5.0);
+                PercentData.put("医疗保健",4.0);
+                PercentData.put("恋爱开销",11.0);
+                PercentData.put("其他",3.0);
+                break;
+            case 2:
+                if(!PercentData.isEmpty()){
+                    PercentData.clear();
+                }
+                PercentData.put("食品烟酒",22.0);
+                PercentData.put("居家物业",11.0);
+                PercentData.put("衣服饰品",11.0);
+                PercentData.put("生活用品",5.0);
+                PercentData.put("行车交通",5.0);
+                PercentData.put("交流通讯",3.0);
+                PercentData.put("人情往来",11.0);
+                PercentData.put("休闲娱乐",7.0);
+                PercentData.put("学习进修",5.0);
+                PercentData.put("医疗保健",3.0);
+                PercentData.put("恋爱开销",11.0);
+                PercentData.put("其他",6.0);
+                break;
+            case 3:
+                if(!PercentData.isEmpty()){
+                    PercentData.clear();
+                }
+                PercentData.put("食品烟酒",18.0);
+                PercentData.put("居家物业",10.0);
+                PercentData.put("父母费用",13.0);
+                PercentData.put("儿女费用",15.0);
+                PercentData.put("衣服饰品",7.0);
+                PercentData.put("生活用品",5.0);
+                PercentData.put("行车交通",6.0);
+                PercentData.put("交流通讯",3.0);
+                PercentData.put("人情往来",8.0);
+                PercentData.put("休闲娱乐",5.0);
+                PercentData.put("学习进修",4.0);
+                PercentData.put("医疗保健",4.0);
+                PercentData.put("其他",2.0);
+                break;
+            case 4:
+                if(!PercentData.isEmpty()){
+                    PercentData.clear();
+                }
+                PercentData.put("食品烟酒",26.0);
+                PercentData.put("居家物业",6.0);
+                PercentData.put("儿女费用",3.0);
+                PercentData.put("衣服饰品",7.0);
+                PercentData.put("生活用品",6.0);
+                PercentData.put("行车交通",6.0);
+                PercentData.put("人情往来",9.0);
+                PercentData.put("交流通讯",5.0);
+                PercentData.put("休闲娱乐",9.0);
+                PercentData.put("学习进修",4.0);
+                PercentData.put("医疗保健",17.0);
+                PercentData.put("其他",2.0);
+                break;
+        }
+        return PercentData;
     }
 }

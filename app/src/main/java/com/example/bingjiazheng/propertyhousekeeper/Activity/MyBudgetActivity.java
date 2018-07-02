@@ -74,11 +74,11 @@ public class MyBudgetActivity extends AppCompatActivity {
     }
 
     private void initview() {
-        user = "123";
-        Life_Stage = 1;
+//        user = "123";
+//        Life_Stage = 1;
         Table = "spend_db";
-//        user = getIntent().getStringExtra("user");
-//        Life_Stage = getIntent().getIntExtra("Life_Stage", 0);
+        user = getIntent().getStringExtra("user");
+        Life_Stage = getIntent().getIntExtra("Life_Stage", 0);
         helper = DbManger.getIntance(this);
         iv_back = findViewById(R.id.iv_back);
         iv_back.setOnClickListener(new View.OnClickListener() {

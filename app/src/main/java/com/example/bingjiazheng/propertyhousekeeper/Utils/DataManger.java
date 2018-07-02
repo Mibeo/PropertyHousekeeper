@@ -84,6 +84,7 @@ public class DataManger {
         datas.add("交流通讯");
         datas.add("人情往来");
         datas.add("学习进修");
+        datas.add("父母费用");
         datas.add("医疗保健");
         datas.add("其他");
     }

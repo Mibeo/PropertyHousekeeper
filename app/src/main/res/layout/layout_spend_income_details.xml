@@ -118,6 +118,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@drawable/shape_bt_login1"
             android:layout_alignParentBottom="true"
             android:text="修改"/>
 
@@ -125,6 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
+            android:background="@drawable/shape_bt_login1"
 android:layout_alignParentRight="true"
             android:text="删除" />
     </RelativeLayout>

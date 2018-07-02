@@ -58,7 +58,7 @@ public class ModifyDeleteActivity extends AppCompatActivity implements View.OnCl
         Life_Stage = getIntent().getIntExtra("Life_Stage",0);
         tv_Title = findViewById(R.id.tv_Title);
         if(Table==Constant.Spend_db){
-            tv_Title.setText("支出详情");
+            tv_Title.setText("支出规划");
         }else if(Table==Constant.Income_db){
             tv_Title.setText("收入详情");
         }
@@ -83,7 +83,7 @@ public class ModifyDeleteActivity extends AppCompatActivity implements View.OnCl
         initView1();
     }
     private void initView1(){
-        tv_money.setText(String.valueOf(singleInfo.getMoney()));
+        tv_money.setText(singleInfo.getMoney()+"元");
         tv_date.setText(singleInfo.getDate());
         tv_type.setText(singleInfo.getType());
         tv_address.setText(singleInfo.getAddress());

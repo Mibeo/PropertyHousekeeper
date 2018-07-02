@@ -169,7 +169,7 @@ public abstract class Spend_IncomeActivity extends AppCompatActivity implements 
     protected abstract void init();
 
     protected void addSpendItem(String user, int life, double money, String date, String type,
-                                String address, String payer_payee, String remark) {
+                                 String address, String payer_payee, String remark) {
         sqLiteDatabase = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put("user", user);

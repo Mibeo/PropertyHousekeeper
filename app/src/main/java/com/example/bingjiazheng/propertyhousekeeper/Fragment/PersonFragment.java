@@ -107,9 +107,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     }
     private void updatePassword(String password){
         sqLiteDatabase = helper.getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put("new_password",password);
-        sqLiteDatabase.update("password_db",contentValues,"user="+user,null);
+        sqLiteDatabase.execSQL("update 'password_db' set new_password='"+password+"' where "+"user='"+user+"'");
         sqLiteDatabase.close();
     }
 

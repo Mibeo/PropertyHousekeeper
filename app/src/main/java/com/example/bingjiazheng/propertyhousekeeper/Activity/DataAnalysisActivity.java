@@ -214,8 +214,6 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
         mPieChart.setExtraOffsets(5, 10, 5, 5);
 
         mPieChart.setDragDecelerationFrictionCoef(0.95f);
-        //设置中间文件
-//        mPieChart.setCenterText(generateCenterSpannableText());
         //设置是否显示圆环中间的洞
         mPieChart.setDrawHoleEnabled(true);
         mPieChart.setHoleColor(Color.WHITE);//设置中间洞颜色
@@ -290,7 +288,6 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
             HashData.clear();
         }
         entries.clear();
-
         data = getData3(this, Table, user, Life_Stage, selector_date);
         if(data!=null){
             for (int i = 0; i < data.size(); i++) {
@@ -330,7 +327,6 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
             HashData.clear();
         }
         entries.clear();
-
         data = getData3(this, Table, user, Life_Stage, selector_date);
         if(data!=null){
             for (int i = 0; i < data.size(); i++) {
@@ -345,19 +341,14 @@ public class DataAnalysisActivity extends AppCompatActivity implements OnChartVa
                 }
             }
             Iterator iterator = HashData.entrySet().iterator();
-
             while (iterator.hasNext()) {
                 Map.Entry entry = (Map.Entry) iterator.next();
                 entries.add(new PieEntry((Float.valueOf(entry.getValue() + "") / Float.valueOf(total_money + "") * 100), entry.getKey() + ""));
             }
-//            mPieChart.invalidate();
             setData(entries);
-            Log.e("total_money",total_money+"");
-
         }
         mPieChart.setCenterText(generateCenterSpannableText("spend_total", total_money));
         mPieChart.invalidate();
-//        generateCenterSpannableText("spend_total");
     }
 
     private void dealdata(String Table, String selector_date) {

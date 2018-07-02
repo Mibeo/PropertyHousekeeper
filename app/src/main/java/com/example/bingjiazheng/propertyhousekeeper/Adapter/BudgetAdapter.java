@@ -50,9 +50,7 @@ public class BudgetAdapter extends BaseAdapter {
             list_key.clear();
         }
         TypeData = get_budget_data(context, user, Life_Stage, budget_month);
-        Log.e("TypeData",TypeData.size()+"");
         HashMap<String, Double> spend_db = DataServer.get_spend_Data(context, user, "spend_db", Life_Stage, budget_month);
-        Log.e("spend_db",spend_db.toString());
         for(int i = 0;i <spend_db.size();i++){
             for(int j = 0;j<TypeData.size();j++){
                 if(list_key.get(i).equals(TypeData.get(j).getType())){

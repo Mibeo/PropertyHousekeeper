@@ -37,6 +37,7 @@ import java.util.Map;
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.getData3;
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.getDataSource;
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.get_budget_data;
+import static com.example.bingjiazheng.propertyhousekeeper.Utils.DataServer.total_money;
 import static com.example.bingjiazheng.propertyhousekeeper.Utils.utils.setListViewHeightBasedOnChildren;
 
 /**
@@ -45,7 +46,7 @@ import static com.example.bingjiazheng.propertyhousekeeper.Utils.utils.setListVi
 
 public class SpendPlanActivity extends AppCompatActivity {
     private String sql1 = "create table if not exists spend_db(_id Integer primary key,user varchar(20),life integer,money decimal,date varchar(10),type varchar(10),address varchar(100),payer_payee varchar(50),remark varchar(200))";
-    private TextView tv_Title,tv_suggest;
+    private TextView tv_Title, tv_suggest;
     private Spinner spinner_life;
     private int Life_Stage;
     private RelativeLayout iv_back;
@@ -63,6 +64,7 @@ public class SpendPlanActivity extends AppCompatActivity {
     private SQLiteDatabase sqLiteDatabase;
     private List<BudgetSingleInfo> budget_data = new ArrayList<>();
     private List<String> list_key = DataServer.list_key;
+    private HashMap<String, Double> PercentData;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -72,10 +74,8 @@ public class SpendPlanActivity extends AppCompatActivity {
     }
 
     private void initview() {
-//        user = getIntent().getStringExtra("user");
-//        Life_Stage = getIntent().getIntExtra("Life_Stage",0);
-        user = "123";
-        Life_Stage = 1;
+        user = getIntent().getStringExtra("user");
+        Life_Stage = getIntent().getIntExtra("Life_Stage",0);
         helper = DbManger.getIntance(this);
         sqLiteDatabase = helper.getWritableDatabase();
         sqLiteDatabase.execSQL(sql1);
@@ -98,7 +98,7 @@ public class SpendPlanActivity extends AppCompatActivity {
                 intent.putExtra("user", user);
                 intent.putExtra("Life_Stage", Life_Stage);
 //                startActivity(intent);
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
             }
         });
         ll_month = findViewById(R.id.ll_month);
@@ -169,7 +169,7 @@ public class SpendPlanActivity extends AppCompatActivity {
         setData(this, Life_Stage, selector_date);
     }
 
-    private void setData(Context context, int Life_Stage, String selector_date) {
+    /*private void setData(Context context, int Life_Stage, String selector_date) {
         listviewAdapter = new ListviewAdapter(this, user, Life_Stage, selector_date);
         listView.setAdapter(listviewAdapter);
         listView.setFocusable(false);
@@ -193,6 +193,31 @@ public class SpendPlanActivity extends AppCompatActivity {
                             stringBuffer.append(list_key.get(j)+" : 支出超额，请控制此方面的消费\n");
                         }
                     }
+                }
+            }
+        }
+        tv_suggest.setText(stringBuffer);
+    }*/
+    private void setData(Context context, int Life_Stage, String selector_date) {
+        listviewAdapter = new ListviewAdapter(this, user, Life_Stage, selector_date);
+        listView.setAdapter(listviewAdapter);
+        listView.setFocusable(false);
+        setListViewHeightBasedOnChildren(listView);//设置listview高度
+        PercentData = DataServer.getPercentData(Life_Stage);
+        Log.e("Percent", PercentData.toString());
+        if (!HashData.isEmpty()) {
+            HashData.clear();
+        }
+        StringBuffer stringBuffer = new StringBuffer("");
+        HashData = DataServer.get_spend_Data(context, user, "spend_db", Life_Stage, selector_date);
+        for (int i = 0; i < HashData.size(); i++) {
+            if (PercentData.containsKey(list_key.get(i))) {
+                double standard = PercentData.get(list_key.get(i));
+                double actual = HashData.get(list_key.get(i)) / total_money*100;
+                if (actual > standard * 1.5) {
+                    stringBuffer.append(list_key.get(i) + " : 支出超额，请控制此方面的消费\n");
+                } else if (actual < standard * 0.5) {
+                    stringBuffer.append(list_key.get(i) + " : 支出较少\n");
                 }
             }
         }
@@ -228,8 +253,8 @@ public class SpendPlanActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == 1&& resultCode == 2){
-            setData(getApplicationContext(),Life_Stage,selector_date);
+        if (requestCode == 1 && resultCode == 2) {
+            setData(getApplicationContext(), Life_Stage, selector_date);
         }
     }
 }
